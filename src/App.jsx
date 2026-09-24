@@ -103,7 +103,7 @@ const EventCard = ({ e, index }) => (
       <div className="absolute inset-0 bg-[#0a0e1c] z-0" style={{ background: `radial-gradient(120% 90% at 20% 0%, ${e.colorStart}, transparent 60%), radial-gradient(100% 80% at 100% 100%, ${e.colorEnd}, transparent 60%), #0a0e1c` }} />
       
       {/* Event Poster */}
-      <img src={e.image} alt={e.name} className="absolute inset-0 w-full h-full object-cover z-10 opacity-90 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105" onError={(err) => err.target.style.display='none'} />
+      <img src={e.image} alt={e.name} className="absolute inset-0 w-full h-full object-cover z-10 opacity-90 transition-all duration-700 group-hover:opacity-100" onError={(err) => err.target.style.display='none'} />
       
       {/* Event Index Badge */}
       <div className="absolute top-[18px] left-[18px] bg-[#10162A]/90 px-3 py-1.5 rounded-md z-20 border border-white/10 shadow-lg">
@@ -132,7 +132,7 @@ const EventCard = ({ e, index }) => (
   </a>
 );
 
-const Footer = () => (
+export const Footer = () => (
   <footer className="relative w-full z-10 pt-20">
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#04060C]/70 to-[#04060C] pointer-events-none" />
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1280px] h-[1px] bg-gradient-to-r from-transparent via-[#FF5A50]/70 to-[#3D9BFF]/70" />
@@ -414,7 +414,7 @@ const Home = () => {
                 <span>Team group photo</span>
                 <span className="normal-case text-[10px] tracking-[0.18em] text-[#5E6474]">team_photo_v1.jpeg</span>
              </div>
-             <img src="/assets/team_photo.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-75 mix-blend-lighten transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105" onLoad={() => { const el = document.getElementById('team-fallback-ui'); if(el) el.style.display='none'; }} onError={(e) => e.target.style.display='none'} />
+             <img src="/assets/team_photo.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-75 mix-blend-lighten transition-all duration-700 ease-out group-hover:opacity-100" onLoad={() => { const el = document.getElementById('team-fallback-ui'); if(el) el.style.display='none'; }} onError={(e) => e.target.style.display='none'} />
           </div>
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1118 468" fill="none" preserveAspectRatio="none">
             <path d="M18 .5H1117.5V450L1100 467.5H.5V18Z" stroke="rgba(255,255,255,.14)" className="group-hover:stroke-white/30 transition-colors duration-500" />

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, CheckCircle } from 'lucide-react';
 import { EVENTS_DATA } from './eventsData';
+import { Footer } from './App';
 
 const EventCardLarge = ({ event, index }) => {
   const isUpcoming = event.status === 'upcoming';
@@ -128,6 +129,7 @@ export const EventsPage = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
