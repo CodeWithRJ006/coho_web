@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-coral: #FF4C4C;
-  --color-blue-start: #4A90E2;
-  --color-blue-end: #7FB8FF;
-  --color-dark: #04060C;
+  --color-bg: #04060C;
+  --color-coral: #FF5A4F;
+  --color-blue: #3D9BFF;
+  --color-muted: #8A90A0;
+  --color-text: #C9CED8;
   --color-gray: #8A8F98;
-  --color-white: #F5F5F7;
-  --font-display: 'Space Grotesk', 'Inter', sans-serif;
-  --font-body: 'Satoshi', 'Inter', sans-serif;
+  --color-dim: #5E6474;
+  --color-highlight: #E4E8F0;
+
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-body: 'Inter', 'Outfit', sans-serif;
 }
 
 body {
-  background-color: var(--color-dark);
-  color: var(--color-white);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -23,7 +26,7 @@ a, button {
 }
 
 .text-gradient-blue {
-  background: linear-gradient(90deg, var(--color-blue-start), var(--color-blue-end));
+  background: linear-gradient(90deg, var(--color-blue), color-mix(in srgb, var(--color-blue) 70%, #04060C));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -34,11 +37,11 @@ a, button {
 }
 
 .bg-gradient-blue {
-  background: linear-gradient(90deg, var(--color-blue-start), var(--color-blue-end));
+  background: linear-gradient(90deg, var(--color-blue), color-mix(in srgb, var(--color-blue) 70%, #04060C));
 }
 
 .bg-gradient-coral {
-  background: linear-gradient(90deg, #FF6B6B, var(--color-coral));
+  background: linear-gradient(90deg, #FF6B5E, var(--color-blue));
 }
 
 .blend-screen {
@@ -50,6 +53,7 @@ a, button {
   50% { transform: translateY(-15px) rotate(2deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
+
 .animate-float {
   animation: float 8s ease-in-out infinite;
 }
@@ -58,25 +62,24 @@ a, button {
   font-family: var(--font-display);
 }
 
-
-
-
-
-
 /* Event Reel Animations & Masks */
 @keyframes roll {
   to { transform: translateX(calc(-50% - 12px)); }
 }
+
 .animate-roll {
   animation: roll 36s linear infinite;
 }
+
 .hover-pause:hover {
   animation-play-state: paused;
 }
+
 .mask-edges {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
+
 .film-holes::before, .film-holes::after {
   content: "";
   position: absolute;
@@ -85,11 +88,14 @@ a, button {
   height: 10px;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10'%3E%3Crect x='6' y='1' width='12' height='8' rx='2.5' fill='%23ffffff' fill-opacity='.16'/%3E%3C/svg%3E") repeat-x;
 }
+
 .film-holes::before { top: 6px; }
 .film-holes::after { bottom: 6px; }
+
 .event-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .event-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -98,6 +104,7 @@ a, button {
 body {
   cursor: url('/cursor.svg') 12 12, auto;
 }
+
 a, button, [role="button"], .cursor-pointer {
   cursor: url('/cursor-pointer.svg') 12 12, pointer !important;
 }
