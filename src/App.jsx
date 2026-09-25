@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Compass } from 'lucide-react';
 import Logo from './components/Logo';
 import { Routes, Route, Link } from 'react-router-dom';
 import { TEAM_DOMAINS } from './teamData';
-import { EVENTS_DATA } from './eventsData';
+import { EVENTS_DATA, getSortedEvents, getEventLink, isUpcomingEvent } from './eventsData';
 import { EventsPage } from './EventsPage';
 
 import SharedContainer from './components/SharedContainer';
@@ -115,106 +115,56 @@ const SciFiCard = ({ delay, title, desc, icon, accent }) => {
   );
 };
 
-const EventCard = ({ e, index }) => (
-  <a href="#" className="relative flex-none w-[300px] block text-white transition-transform duration-300 hover:-translate-y-2 group  mb-4">
-    {/* Image Container with Clip Path */}
-    <div className="relative w-[300px] h-[330px] overflow-hidden bg-[#0b0f1e] mb-5 border border-white/5 shadow-lg group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}>
-      {/* Background Gradient fallback */}
-      <div className="absolute inset-0 bg-[#0a0e1c] z-0" style={{ background: `radial-gradient(120% 90% at 20% 0%, ${e.colorStart}, transparent 60%), radial-gradient(100% 80% at 100% 100%, ${e.colorEnd}, transparent 60%), #0a0e1c` }} />
-
-      {/* Event Poster */}
-      <img src={e.image} alt={e.name} className="absolute inset-0 w-full h-full object-cover z-10 opacity-90 transition-all duration-700 group-hover:opacity-100" onError={(err) => err.target.style.display='none'} />
-
-      {/* Event Index Badge */}
-      <div className="absolute top-[18px] left-[18px] bg-[#10162A]/90 px-3 py-1.5 rounded-md z-20 border border-white/10 shadow-lg">
-        <span className="text-[8px] tracking-[0.3em] text-white/90 font-bold uppercase">EVENT 0{index + 1}</span>
-      </div>
-
-      {/* Subtle overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#04060C]/60 z-20 pointer-events-none" />
-      <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] z-20 pointer-events-none group-hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] transition-shadow duration-500" />
-    </div>
-
-    {/* Text Content Below the Image */}
-    <div className="flex flex-col relative z-20 px-2">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#FF5A4F] shadow-[0_0_8px_#FF5A4F]" />
-        <span className="text-[10px] tracking-[0.2em] font-medium text-[#FF5A4F] uppercase">{e.dateLabel}</span>
-      </div>
-      <b className="font-display font-black text-2xl uppercase tracking-tight text-white mb-1 group-hover:text-[#3D9BFF] transition-colors line-clamp-1">{e.name}</b>
-      <em className="not-italic text-[11px] tracking-[0.1em] text-[#8A90A0] uppercase font-medium line-clamp-1">{e.tag}</em>
-    </div>
-
-    {/* Arrow Icon Button */}
-    <div className="absolute bottom-[-10px] right-2 w-[40px] h-[40px] bg-[#1a2035] flex items-center justify-center transition-colors group-hover:bg-[#FF5A4F] border border-white/10 shadow-xl" style={{ clipPath: 'polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 8px)' }}>
-      <ArrowRight className="w-4 h-4 text-white -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-    </div>
-  </a>
-);
-
-
-const EventCarousel = ({ events }) => {
-  const scrollRef = React.useRef(null);
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [isDragging, setIsDragging] = React.useState(false);
-  const [startX, setStartX] = React.useState(0);
-  const [scrollLeftState, setScrollLeftState] = React.useState(0);
-
-  const isInView = useInView(scrollRef, { margin: "200px" });
-  React.useEffect(() => {
-    let animationId;
-    const scroll = () => {
-      if (scrollRef.current && !isHovered && !isDragging && isInView) {
-        scrollRef.current.scrollLeft += 1.5;
-        const totalWidth = 324 * events.length;
-        if (scrollRef.current.scrollLeft >= totalWidth) {
-           scrollRef.current.scrollLeft -= totalWidth;
-        }
-      }
-      animationId = requestAnimationFrame(scroll);
-    };
-    animationId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationId);
-  }, [isHovered, isDragging, events.length, isInView]);
-
-  React.useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const handleWheel = (e) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        el.scrollLeft += e.deltaY;
-      }
-    };
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, []);
+const EventCard = ({ e }) => {
+  const targetUrl = getEventLink(e);
 
   return (
-    <div className="relative w-[100vw] left-1/2 -translate-x-1/2 h-[480px] overflow-hidden mask-edges film-holes">
+    <a
+      href={targetUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative flex-none w-[300px] block group mb-4 transition-transform duration-300 hover:-translate-y-2"
+    >
+      {/* Poster Image Container */}
       <div
-        ref={scrollRef}
-        className="absolute left-0 top-0 w-full h-full flex gap-[24px] pt-[30px] pb-[10px] overflow-x-auto event-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => { setIsHovered(false); setIsDragging(false); }}
-        onMouseDown={(e) => {
-          setIsDragging(true);
-          setStartX(e.pageX - scrollRef.current.offsetLeft);
-          setScrollLeftState(scrollRef.current.scrollLeft);
-        }}
-        onMouseUp={() => setIsDragging(false)}
-        onMouseMove={(e) => {
-          if (!isDragging) return;
-          e.preventDefault();
-          const x = e.pageX - scrollRef.current.offsetLeft;
-          const walk = (x - startX) * 2;
-          scrollRef.current.scrollLeft = scrollLeftState - walk;
-        }}
-        onTouchStart={() => setIsHovered(true)}
-        onTouchEnd={() => setIsHovered(false)}
+        className="relative w-[300px] h-[330px] overflow-hidden bg-[#0b0f1e] mb-3 border border-white/5 shadow-lg group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-shadow duration-500"
+        style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
-        {[...events, ...events, ...events, ...events, ...events].map((e, index) => (
-          <EventCard key={index} e={e} index={index % events.length} />
+        <img
+          src={e.image}
+          alt={e.name}
+          className="absolute inset-0 w-full h-full object-cover z-10 opacity-100 transition-transform duration-700 group-hover:scale-105"
+          onError={(err) => { err.target.style.display = 'none'; }}
+        />
+        {/* Bottom Scrim with Date Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#02040A]/85 via-[#02040A]/40 to-transparent z-20 flex items-end p-4 pointer-events-none">
+          <span className="font-sans font-medium text-[11px] tracking-[0.2em] text-white uppercase">
+            {e.dateLabel}
+          </span>
+        </div>
+      </div>
+
+      {/* Event Name Below Image */}
+      <h3 className="font-sans font-medium text-[17px] leading-snug text-white group-hover:text-[#3D9BFF] transition-colors line-clamp-2 px-1">
+        {e.name}
+      </h3>
+    </a>
+  );
+};
+
+const EventCarousel = ({ events }) => {
+  const sortedEvents = getSortedEvents(events);
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <div className="relative w-[100vw] left-1/2 -translate-x-1/2 h-[440px] overflow-hidden mask-edges film-holes">
+      <div
+        className={`flex gap-[24px] pt-[30px] pb-[10px] w-max ${
+          shouldReduceMotion ? '' : 'animate-roll hover-pause'
+        }`}
+      >
+        {[...sortedEvents, ...sortedEvents].map((e, index) => (
+          <EventCard key={index} e={e} />
         ))}
       </div>
     </div>
@@ -385,44 +335,52 @@ const Home = () => {
         </SharedContainer>
       </section>
 
-      <section id="team" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
-        <div className="flex justify-between items-center w-full mb-8">
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
-            <span className="text-[#3D9BFF] font-medium">03</span>
-            <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
-            <span className="text-[#E4E8F0] uppercase font-medium">Our Team</span>
-            <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
-          </motion.div>
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[12px] tracking-[0.1em] text-[#8A8F98]">//03</motion.div>
-        </div>
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full h-[300px] md:h-[468px] mt-4 group transition-all duration-500 hover:scale-[1.02] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
-          <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#10162A] to-[#080B16]" style={{ clipPath: 'polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)' }}>
-             <div id="team-fallback-ui" className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-[#8A90A0] text-[11px] tracking-[0.25em] uppercase z-0">
-                <svg width="46" height="40" viewBox="0 0 48 44" fill="none" stroke="#6B7286" strokeWidth="1.4" strokeLinecap="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5"/><path d="M2 36c0-6 3-10 8-10"/><circle cx="38" cy="17" r="4.5"/><path d="M46 36c0-6-3-10-8-10"/></svg>
-                <span>Team group photo</span>
-                <span className="normal-case text-[10px] tracking-[0.18em] text-[#5E6474]">team_photo_v1.jpeg</span>
-             </div>
-             <img src="/assets/team_photo.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-75 mix-blend-lighten transition-all duration-700 ease-out group-hover:opacity-100" onLoad={() => { const el = document.getElementById('team-fallback-ui'); if(el) el.style.display='none'; }} onError={(e) => e.target.style.display='none'} />
+      <section id="team" className="relative w-full py-24 md:py-32 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
+        <SharedContainer className="w-full relative z-20">
+          <div className="flex justify-between items-center w-full mb-8">
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
+              <span className="text-[#3D9BFF] font-medium">03</span>
+              <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
+              <span className="text-[#E4E8F0] uppercase font-medium">Our Team</span>
+              <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[12px] tracking-[0.1em] text-[#8A8F98]">//03</motion.div>
           </div>
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1118 468" fill="none" preserveAspectRatio="none">
-            <path d="M18 .5H1117.5V450L1100 467.5H.5V18Z" stroke="rgba(255,255,255,.14)" className="group-hover:stroke-white/30 transition-colors duration-500" />
-            <path d="M.5 90V18L18 .5H90M1117.5 378v72L1100 467.5H1028" stroke="url(#team-g)" strokeWidth="1.8" />
-            <defs>
-              <linearGradient id="team-g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#3D9BFF" />
-                <stop offset="1" stopColor="#FF5A4F" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-12">
-          <Link to="/team" className="group relative inline-flex items-center justify-center gap-4 w-[216px] h-[44px] rounded-full border border-transparent text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden  card-hover transition-transform duration-300 hover:scale-105" style={{ background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box' }}>
-            <span className="relative z-10">MEET THE CREW</span>
-            <svg width="16" height="10" viewBox="0 0 18 12" fill="none" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
-
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-          </Link>
-        </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full aspect-[2.4/1] min-h-[280px] mt-4 group transition-all duration-500 hover:scale-[1.01] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
+            <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#10162A] to-[#080B16]" style={{ clipPath: 'polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)' }}>
+               <div id="team-fallback-ui" className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-[#8A90A0] text-[11px] tracking-[0.25em] uppercase z-0">
+                  <svg width="46" height="40" viewBox="0 0 48 44" fill="none" stroke="#6B7286" strokeWidth="1.4" strokeLinecap="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5"/><path d="M2 36c0-6 3-10 8-10"/><circle cx="38" cy="17" r="4.5"/><path d="M46 36c0-6-3-10-8-10"/></svg>
+                  <span>Team group photo</span>
+                  <span className="normal-case text-[10px] tracking-[0.18em] text-[#5E6474]">team_photo_v1.jpeg</span>
+               </div>
+               <img src="/assets/team_photo.jpg" alt="Team Photo" className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-100 transition-all duration-700 ease-out" onLoad={() => { const el = document.getElementById('team-fallback-ui'); if(el) el.style.display='none'; }} onError={(e) => e.target.style.display='none'} />
+            </div>
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1118 468" fill="none" preserveAspectRatio="none">
+              <path d="M18 .5H1117.5V450L1100 467.5H.5V18Z" stroke="rgba(255,255,255,.14)" className="group-hover:stroke-white/30 transition-colors duration-500" />
+              <path d="M.5 90V18L18 .5H90M1117.5 378v72L1100 467.5H1028" stroke="url(#team-g)" strokeWidth="1.8" />
+              <defs>
+                <linearGradient id="team-g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#3D9BFF" />
+                  <stop offset="1" stopColor="#FF5A4F" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-12">
+            <Link
+              to="/team"
+              className="group relative inline-flex items-center justify-center gap-2 w-[216px] h-[44px] rounded-full text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden transition-transform duration-300 hover:scale-105"
+              style={{
+                background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box',
+                border: '1px solid transparent',
+              }}
+            >
+              <span className="relative z-10">MEET THE CREW</span>
+              <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            </Link>
+          </motion.div>
+        </SharedContainer>
       </section>
 
       <section id="events" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">

@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, CheckCircle } from 'lucide-react';
-import { EVENTS_DATA } from './eventsData';
+import { EVENTS_DATA, isUpcomingEvent, getEventLink } from './eventsData';
 import SharedContainer from './components/SharedContainer';
 import Footer from './components/Footer';
 
 const EventCardLarge = ({ event, index }) => {
-  const isUpcoming = event.status === 'upcoming';
+  const isUpcoming = isUpcomingEvent(event);
+  const targetUrl = getEventLink(event);
 
   return (
     <motion.div
@@ -55,14 +56,16 @@ const EventCardLarge = ({ event, index }) => {
           {event.name}
         </h2>
 
-        <p className="text-[14px] tracking-[0.1em] text-[#8A90A0] uppercase font-medium mb-8">
-          {event.tag}
-        </p>
+        {event.tag && (
+          <p className="text-[14px] tracking-[0.1em] text-[#8A90A0] uppercase font-medium mb-8">
+            {event.tag}
+          </p>
+        )}
 
         <div className="mt-auto">
           {isUpcoming ? (
             <a
-              href={event.registrationLink || '#'}
+              href={targetUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#FF5A4F] text-white text-[11px] font-bold tracking-[0.15em] uppercase hover:bg-[#FF5A4F]/90 transition-colors shadow-[0_0_20px_rgba(255,90,79,0.3)] hover:shadow-[0_0_30px_rgba(255,90,79,0.5)]"
@@ -71,13 +74,15 @@ const EventCardLarge = ({ event, index }) => {
               <ArrowUpRight className="w-4 h-4" />
             </a>
           ) : (
-            <button
-              disabled
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-[#8A90A0] text-[11px] font-bold tracking-[0.15em] uppercase cursor-not-allowed"
+            <a
+              href={targetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-[#8A90A0] hover:text-white hover:bg-white/10 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors"
             >
               <CheckCircle className="w-4 h-4" />
-              CONCLUDED
-            </button>
+              VIEW INSTAGRAM
+            </a>
           )}
         </div>
       </div>
@@ -86,8 +91,8 @@ const EventCardLarge = ({ event, index }) => {
 };
 
 export const EventsPage = () => {
-  const upcomingEvents = EVENTS_DATA.filter(e => e.status === 'upcoming');
-  const pastEvents = EVENTS_DATA.filter(e => e.status === 'concluded');
+  const upcomingEvents = EVENTS_DATA.filter(isUpcomingEvent);
+  const pastEvents = EVENTS_DATA.filter(e => !isUpcomingEvent(e));
 
   return (
     <div className="min-h-screen pt-32 pb-20 relative z-10">
@@ -105,33 +110,33 @@ export const EventsPage = () => {
         </p>
       </motion.div>
 
-      {upcomingEvents.length > 0 && (
-        <div className="mb-20">
-          <h3 className="text-white font-display font-bold text-2xl tracking-wide uppercase border-b border-white/10 pb-4 mb-8">
-            Upcoming Events
-          </h3>
-          <div className="flex flex-col gap-6">
-            {upcomingEvents.map((event, i) => (
-              <EventCardLarge key={i} event={event} index={i} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {pastEvents.length > 0 && (
-        <div>
-          <h3 className="text-white font-display font-bold text-2xl tracking-wide uppercase border-b border-white/10 pb-4 mb-8 opacity-80">
-            Past Events
-          </h3>
-          <div className="flex flex-col gap-6">
-            {pastEvents.map((event, i) => (
-              <EventCardLarge key={i} event={event} index={i + upcomingEvents.length} />
-            ))}
-          </div>
-        </div>
-      )}
-
       <SharedContainer>
+        {upcomingEvents.length > 0 && (
+          <div className="mb-20">
+            <h3 className="text-white font-display font-bold text-2xl tracking-wide uppercase border-b border-white/10 pb-4 mb-8">
+              Upcoming Events
+            </h3>
+            <div className="flex flex-col gap-6">
+              {upcomingEvents.map((event, i) => (
+                <EventCardLarge key={i} event={event} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {pastEvents.length > 0 && (
+          <div>
+            <h3 className="text-white font-display font-bold text-2xl tracking-wide uppercase border-b border-white/10 pb-4 mb-8 opacity-80">
+              Past Events
+            </h3>
+            <div className="flex flex-col gap-6">
+              {pastEvents.map((event, i) => (
+                <EventCardLarge key={i} event={event} index={i + upcomingEvents.length} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <Footer />
       </SharedContainer>
     </div>
