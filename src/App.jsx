@@ -279,11 +279,11 @@ const Home = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="font-mono text-[11px] tracking-[0.2em] text-[#00d4cc] mb-4 flex items-center gap-2"
+                className="font-mono text-[11px] tracking-[0.2em] mb-4 flex items-center gap-2"
               >
-                <span>&gt;_</span>
-                <span>coho@smec:~$</span>
-                <span className="text-[#546e7a]">./run platform</span>
+                <span className="text-[#00ff88]">&gt;_</span>
+                <span className="text-[#00d4cc]">coho@smec:~$</span>
+                <span className="text-[#00aaff]">cd root</span>
               </motion.div>
 
               {/* Headline - ECell-style outline stroke draw-in, then fill solidifies */}
@@ -724,11 +724,12 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Design",
     color: "#FF5A4F",
     icon: (
-      // Artist paintbrush with angled bristle tip and ferrule
+      // Unmistakable artist/flat paintbrush with bristles and ferrule (no pen)
       <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18.37 2.63a2.5 2.5 0 0 1 3.54 3.54L11 17l-4.5.5.5-4.5L18.37 2.63z" fill="currentColor" fillOpacity="0.2" />
-        <path d="M14.5 6.5l3 3" />
-        <path d="M2.5 21.5c1-2 3-2.5 4.5-2.5s2.5.5 3.5 2.5c-2.5 1.5-6.5 1.5-8 0z" fill="currentColor" fillOpacity="0.5" />
+        <path d="M10 2v2" />
+        <path d="M14 2v4" />
+        <path d="M17 2a1 1 0 0 1 1 1v9H6V3a1 1 0 0 1 1-1z" fill="currentColor" fillOpacity="0.18" />
+        <path d="M6 12a1 1 0 0 0-1 1v1a2 2 0 0 0 2 2h2a1 1 0 0 1 1 1v2.9a2 2 0 1 0 4 0V17a1 1 0 0 1 1-1h2a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1" />
       </svg>
     )
   },
@@ -896,14 +897,16 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
 
 // ── Custom Framing Overrides for Specific Member Photos ──────────────────────
 const MEMBER_IMAGE_STYLES = {
-  akshay: { objectPosition: 'center 65%', transform: 'scale(1.25)', transformOrigin: 'center center' },
-  aswin: { objectPosition: 'center 95%', transform: 'scale(1.68) translateY(-4%)', transformOrigin: 'center center' },
+  akshay: { objectPosition: 'center 65%', transform: 'scale(1.38)', transformOrigin: 'center center' },
+  prakash: { objectPosition: 'center 25%', transform: 'scale(1.35)', transformOrigin: 'center center' },
+  amrit: { objectPosition: 'center 60%', transform: 'scale(1.65)', transformOrigin: 'center center' },
+  shrute: { objectPosition: 'center 35%', transform: 'scale(1.50)', transformOrigin: 'center center' },
+  aswin: { objectPosition: 'center 85%', transform: 'scale(1.35) translateY(-5%)', transformOrigin: 'center center' },
+  sahitya: { objectPosition: 'center 85%', transform: 'scale(1.35) translateY(-5%)', transformOrigin: 'center center' },
+  akshaya: { objectPosition: 'center 65%', transform: 'scale(1.25)', transformOrigin: 'center center' },
   ardha: { objectPosition: 'center 35%', transform: 'scale(1.20)', transformOrigin: 'center center' },
   pravallika: { objectPosition: 'center 45%', transform: 'scale(1.35)', transformOrigin: 'center center' },
   gnaneshwar: { objectPosition: 'center 85%', transform: 'scale(1.40)', transformOrigin: 'center center' },
-  sahitya: { objectPosition: 'center 95%', transform: 'scale(1.78) translateY(-6%)', transformOrigin: 'center center' },
-  amrit: { objectPosition: 'center 50%', transform: 'scale(1.30)', transformOrigin: 'center center' },
-  akshaya: { objectPosition: 'center 65%', transform: 'scale(1.25)', transformOrigin: 'center center' },
 };
 
 const getMemberImageStyle = (name = '') => {
@@ -1145,8 +1148,8 @@ const TeamPage = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-6 sm:mb-8 border-b border-white/10 gap-2 text-[10px] sm:text-xs text-[#546e7a] font-mono">
             <div className="flex items-center gap-2">
               <span className="text-[#00ff88]">&gt;_</span>
-              <span className="text-[#8b949e]">root@coho:~/crew$</span>
-              <span className="text-[#00aaff]">cat ./team.json | jq .roster</span>
+              <span className="text-[#00d4cc]">coho@smec:~$</span>
+              <span className="text-[#00aaff]">cd team</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] flex-wrap">
               <span>NODES: 40+</span>
@@ -1171,25 +1174,7 @@ const TeamPage = () => {
             </p>
           </div>
 
-          {/* Interactive Domain Filter Tabs - horizontal scroll on mobile */}
-          <div className="flex gap-2 mb-10 sm:mb-12 pb-3 border-b border-white/10 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap hide-scrollbar">
-            {filterOptions.map((filter) => {
-              const isActive = selectedFilter === filter.domainMatch;
-              return (
-                <button
-                  key={filter.domainMatch}
-                  onClick={() => setSelectedFilter(filter.domainMatch)}
-                  className={`text-[11px] sm:text-xs px-3 sm:px-3.5 py-1.5 rounded-none font-mono uppercase tracking-wider transition-all border whitespace-nowrap shrink-0 ${
-                    isActive
-                      ? 'bg-[#FF5A4F] text-[#04060C] font-bold border-[#FF5A4F]'
-                      : 'bg-[#070913] text-[#8b949e] border-white/10 hover:border-white/40 hover:text-white'
-                  }`}
-                >
-                  [ {filter.label} ]
-                </button>
-              );
-            })}
-          </div>
+
 
           {/* Rendered Domains with clean, unzoomed cards and anchor IDs */}
           <div className="flex flex-col pb-16">

@@ -152,6 +152,13 @@ export const EventsPage = () => {
             transition={{ duration: 0.8 }}
             className="mb-8 md:mb-12 text-center"
           >
+            {/* Terminal prompt eyebrow */}
+            <div className="font-mono text-[11px] sm:text-xs tracking-[0.2em] mb-4 flex items-center justify-center gap-2">
+              <span className="text-[#00ff88]">&gt;_</span>
+              <span className="text-[#00d4cc]">coho@smec:~$</span>
+              <span className="text-[#00aaff]">cd events</span>
+            </div>
+
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
               COHO <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">EVENTS</span>
             </h1>
