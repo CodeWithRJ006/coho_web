@@ -591,6 +591,20 @@ class ErrorBoundary extends React.Component {
 }
 
 // ── Domain Icons & Data for Rotary Wheel ───────────────────────────────────────
+// ── Role Priority Helper for Ordering ──────────────────────────────────────────
+const getRolePriority = (role = '') => {
+  const r = role.toLowerCase();
+  if (r.includes('president') && !r.includes('vice')) return 1;
+  if (r.includes('vice president')) return 2;
+  if (r.includes('general secretary')) return 3;
+  if (r.includes('treasurer')) return 4;
+  if (r.includes('lead advisor')) return 5;
+  if (r.includes('advisor')) return 6;
+  if (r.includes('lead') && !r.includes('co-lead')) return 7;
+  if (r.includes('co-lead')) return 8;
+  return 10;
+};
+
 const DOMAIN_ROTARY_ITEMS = [
   {
     key: "leadership",
