@@ -104,80 +104,44 @@ const SharpButton = ({ children, href, to, onClick, variant = 'primary', classNa
   return <button onClick={onClick} className={cls}>{children}</button>;
 };
 
-// ── Section Label ──────────────────────────────────────────────────────────────
-const SectionLabel = ({ index, label }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -16 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    viewport={{ once: true }}
-    className="flex items-center gap-3 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-[#546e7a] uppercase mb-8"
-  >
-    <span className="text-[#FF5A4F]">{'//'}_{String(index).padStart(2, '0')}</span>
-    <span className="w-8 h-px bg-white/15" />
-    <span>{label}</span>
-  </motion.div>
-);
-
-// ── Domain Tiles ───────────────────────────────────────────────────────────────
-const DOMAINS = [
-  {
-    tag: 'WEB',
-    title: 'Web Dev',
-    desc: 'Full-stack engineering, UI/UX, and modern frameworks.',
-    accent: '#3D9BFF',
-  },
-  {
-    tag: 'AI',
-    title: 'Artificial Intelligence',
-    desc: 'Machine learning, computer vision, and data science.',
-    accent: '#c792ea',
-  },
-  {
-    tag: 'CLOUD',
-    title: 'Cloud & DevOps',
-    desc: 'AWS, containers, CI/CD pipelines, and infrastructure.',
-    accent: '#00d4cc',
-  },
-  {
-    tag: 'DSA',
-    title: 'Algorithms',
-    desc: 'Competitive programming, data structures, and problem solving.',
-    accent: '#ffcc00',
-  },
-  {
-    tag: 'DESIGN',
-    title: 'Design Systems',
-    desc: 'Product design, Figma workflows, and design engineering.',
-    accent: '#FF5A4F',
-  },
-];
-
-const DomainTile = ({ domain, index }) => {
+// ── SciFiCard from ui-overhaul ─────────────────────────────────────────────────
+const SciFiCard = ({ delay, title, desc, icon, accent }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="group border border-white/8 hover:border-white/20 transition-colors duration-300 p-5 sm:p-6 cursor-default"
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.8, delay }}
+      className="relative group w-[263px] h-[187px] card-hover shrink-0"
     >
-      <div className="flex items-start justify-between mb-3">
-        <span
-          className="font-mono text-[10px] tracking-[0.25em] px-2 py-0.5 border font-semibold"
-          style={{ color: domain.accent, borderColor: `${domain.accent}40` }}
-        >
-          [{domain.tag}]
-        </span>
-        <span className="font-mono text-[10px] text-[#3a4254] font-medium">{String(index + 1).padStart(2, '0')}</span>
+      <div
+        className="absolute inset-0 bg-[#0a0e1c] overflow-hidden"
+        style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
+      >
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+          style={{ background: 'radial-gradient(circle at center, rgba(61,155,255,0.15) 0%, transparent 70%)' }}
+        />
+        <div className="absolute inset-0 pt-[26px] px-[31px] pb-[20px] flex flex-col items-start text-left z-10">
+          <div className="mb-[12px] transform group-hover:-translate-y-1 group-hover:scale-105 transition-all duration-500 shrink-0">
+            {icon}
+          </div>
+          <h3 className="font-sans font-medium text-[15px] tracking-[0.22em] uppercase mb-[6px] text-[#F2F4F8] group-hover:text-white transition-colors shrink-0">
+            {title}
+          </h3>
+          <p
+            className="font-sans font-light text-[13.3px] leading-[20px] text-[#B8BDC9] tracking-normal"
+            dangerouslySetInnerHTML={{ __html: desc }}
+          />
+        </div>
       </div>
-      <h3 className="font-display font-bold text-[16px] tracking-[-0.01em] text-white mb-2 group-hover:text-[#E4E8F0] transition-colors">
-        {domain.title}
-      </h3>
-      <p className="text-[#8A90A0] text-[13px] leading-[1.65] font-sans group-hover:text-[#C9CED8] transition-colors">
-        {domain.desc}
-      </p>
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 263 187" fill="none">
+        <path d="M14 .5H262.5V173L249 186.5H.5V14Z" stroke="rgba(255,255,255,.12)" className="group-hover:stroke-white/30 transition-colors duration-500" />
+        {accent}
+      </svg>
     </motion.div>
   );
 };
@@ -202,13 +166,11 @@ const EventCard = ({ e }) => {
           className="absolute inset-0 w-full h-full object-cover z-10 opacity-100 transition-transform duration-500 group-hover:scale-105"
           onError={(err) => { err.target.style.display = 'none'; }}
         />
-        {/* Bottom scrim with date */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#02040A]/90 to-transparent z-20 flex items-end p-4 pointer-events-none">
           <span className="font-mono text-[10px] tracking-[0.2em] text-[#8A90A0] uppercase">
             {e.dateLabel}
           </span>
         </div>
-        {/* Top-right bracket accent */}
         <div className="absolute top-0 right-0 w-5 h-5 border-t border-r border-[#FF5A4F] z-30 pointer-events-none" />
       </div>
       <h3 className="font-sans font-medium text-[14px] sm:text-[15px] leading-snug text-[#C9CED8] group-hover:text-white transition-colors line-clamp-2 px-1">
@@ -218,6 +180,7 @@ const EventCard = ({ e }) => {
   );
 };
 
+// ── Event Carousel ─────────────────────────────────────────────────────────────
 const EventCarousel = ({ events }) => {
   const sortedEvents = getSortedEvents(events);
   const shouldReduceMotion = useReducedMotion();
@@ -245,14 +208,9 @@ const Home = () => {
 
   return (
     <div className="w-full">
-
       {/* ── HERO ───────────────────────────────────────────────────── */}
       <section className="relative w-full h-screen min-h-[700px] md:min-h-[740px] flex flex-col z-10 pt-24 md:pt-28 overflow-hidden">
-        {/* Left-side readability scrim - fades right so matrix rain stays visible on right */}
-        <div
-          className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(100deg, rgba(4,6,12,0.88) 0%, rgba(4,6,12,0.70) 45%, rgba(4,6,12,0.15) 70%, transparent 100%)' }}
-        />
+        
 
         <SharedContainer className="flex flex-col justify-between h-full w-full relative z-20">
           <div className="flex-1 flex items-center w-full">
@@ -280,18 +238,13 @@ const Home = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   overflow="visible"
-                  style={{ filter: 'drop-shadow(0 2px 16px rgba(4,6,12,0.95))' }}
+                  style={{ filter: 'drop-shadow(0 2px 18px rgba(4,6,12,0.95))' }}
                 >
                   {/*
-                    Phase 1 (0 - 1.0s): stroke draws in, fill is transparent = pure outline
-                    Phase 2 (1.0 - 1.5s): fill fades in = text solidifies
-                    HOPPERS is staggered 0.4s behind CODE
-                  */}
-
-                  {/*
-                    Phase 1 (t=0.15s - 1.25s): CODE and HOPPERS stroke outlines write in AT THE SAME TIME
-                    Phase 2 (t=1.25s): CODE fill immediately floods in
-                    Phase 3 (t=1.75s): HOPPERS fill floods in after a 0.5s delay
+                    Phase 1 (t=0.8s - 1.95s): CODE and HOPPERS stroke outlines write in AT THE SAME TIME
+                    (waits until loading screen fade-out finishes)
+                    Phase 2 (t=1.95s): CODE fill immediately floods in
+                    Phase 3 (t=2.45s): HOPPERS fill floods in after a 0.5s delay
                   */}
 
                   {/* CODE outline layer - simultaneous stroke write-in */}
@@ -308,7 +261,7 @@ const Home = () => {
                     strokeDasharray="3600 3600"
                     initial={{ strokeDashoffset: 3600 }}
                     animate={{ strokeDashoffset: 0 }}
-                    transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
+                    transition={{ duration: 1.15, ease: [0.25, 0.1, 0.25, 1], delay: 0.8 }}
                   >CODE</motion.text>
                   {/* CODE fill layer - floods in right when stroke completes */}
                   <motion.text
@@ -322,7 +275,7 @@ const Home = () => {
                     strokeWidth="1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.35, delay: 1.25 }}
+                    transition={{ duration: 0.35, delay: 1.95 }}
                   >CODE</motion.text>
 
                   {/* HOPPERS outline layer - writes at the EXACT SAME TIME as CODE */}
@@ -339,7 +292,7 @@ const Home = () => {
                     strokeDasharray="4600 4600"
                     initial={{ strokeDashoffset: 4600 }}
                     animate={{ strokeDashoffset: 0 }}
-                    transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
+                    transition={{ duration: 1.15, ease: [0.25, 0.1, 0.25, 1], delay: 0.8 }}
                   >HOPPERS</motion.text>
                   {/* HOPPERS fill layer - 0.5s delay before fill floods in */}
                   <motion.text
@@ -353,7 +306,7 @@ const Home = () => {
                     strokeWidth="1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 1.75 }}
+                    transition={{ duration: 0.4, delay: 2.45 }}
                   >HOPPERS</motion.text>
                 </svg>
               </h1>
@@ -428,136 +381,117 @@ const Home = () => {
         </SharedContainer>
       </section>
 
-      {/* ── ABOUT / DOMAINS ────────────────────────────────────────── */}
-      <section id="about" className="relative w-full py-24 md:py-32 z-10 scroll-mt-[96px]">
-        <SharedContainer>
-          <SectionLabel index={1} label="What We Do" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10"
-          >
-            <h2 className="font-display font-extrabold text-[clamp(32px,4.5vw,64px)] leading-[1.05] tracking-tight text-white mb-4">
-              Five Domains.<br />One Crew.
-            </h2>
-            <p className="text-[#8A90A0] text-[14px] max-w-[520px] leading-[1.7]">
-              CoHo runs five active technical tracks. Join one, join all. We ship
-              projects, run workshops, and compete year-round.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-px bg-white/5">
-            {DOMAINS.map((d, i) => (
-              <div key={i} className="bg-[#04060C]">
-                <DomainTile domain={d} index={i} />
-              </div>
-            ))}
-          </div>
-        </SharedContainer>
-      </section>
-
-      {/* ── TEAM ───────────────────────────────────────────────────── */}
-      <section id="team" className="relative w-full py-24 md:py-32 z-10 scroll-mt-[96px]">
+      <section id="about" className="relative w-full py-20 md:py-32 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <SharedContainer className="w-full relative z-20">
-          <SectionLabel index={2} label="The Crew" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-8"
-          >
-            <h2 className="font-display font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] tracking-tight text-white">
-              40+ Builders.<br />One Mission.
-            </h2>
-          </motion.div>
-
-          {/* Team Photo */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative w-full aspect-[2.4/1] min-h-[140px] sm:min-h-[220px] md:min-h-[280px] mt-4 group border border-white/8 hover:border-white/18 transition-colors duration-400 cursor-pointer overflow-hidden"
-          >
-            {/* Fallback */}
-            <div id="team-fallback-ui" className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-[#546e7a] text-[11px] tracking-[0.25em] uppercase z-0">
-              <svg width="46" height="40" viewBox="0 0 48 44" fill="none" stroke="#546e7a" strokeWidth="1.4" strokeLinecap="round">
-                <circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/>
-                <circle cx="10" cy="17" r="4.5"/><path d="M2 36c0-6 3-10 8-10"/>
-                <circle cx="38" cy="17" r="4.5"/><path d="M46 36c0-6-3-10-8-10"/>
-              </svg>
-              <span>team_photo.jpg</span>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative w-full mb-12 md:mb-16">
+            <div className="w-full md:w-[60%] z-20">
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] mb-4 md:mb-6">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+                <span className="text-[#C9CED8] uppercase font-medium">ABOUT COHO</span>
+              </motion.div>
+              <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="font-display font-extrabold leading-[0.95] md:leading-[0.9] tracking-tighter text-[clamp(36px,8.5vw,80px)] mb-6 md:mb-8 sm:whitespace-nowrap">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FFFFFF] via-[#8EC4FF] to-[#3D8BFF]">CODE. CREATE.</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FF9A8A] via-[#FF5148] to-[#FF3838]">CONQUER.</span>
+              </motion.h2>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-[#D5DAE6] text-[15px] sm:text-[17px] font-light tracking-[0.04em] leading-[22px] sm:leading-[24px]">
+                A community of innovators powered by code.<br className="hidden sm:block"/> Learn. Build. Grow. Together.
+              </motion.p>
             </div>
-            <img
-              src="/assets/team_photo.jpg"
-              alt="Team Photo"
-              className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-100 transition-transform duration-700 group-hover:scale-[1.02] ease-out"
-              onLoad={() => { const el = document.getElementById('team-fallback-ui'); if (el) el.style.display = 'none'; }}
-              onError={(e) => e.target.style.display = 'none'}
-            />
-            {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-[#3D9BFF] z-20 pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-[#FF5A4F] z-20 pointer-events-none" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-8"
-          >
-            <SharpButton to="/team" variant="primary">
-              Meet the Crew
-              <svg width="14" height="9" viewBox="0 0 18 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
-            </SharpButton>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="w-[225px] absolute right-[8%] top-[18%] opacity-100 z-10 pointer-events-none hidden md:block">
+              <div className="w-full h-full relative animate-float" style={{ animationDelay: '1s' }}>
+                <img src="/astronaut.webp" alt="Astronaut" className="w-full h-auto object-contain drop-shadow-[0_0_20px_rgba(61,155,255,0.2)]" />
+              </div>
+            </motion.div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-x-[40px] gap-y-6 md:gap-y-8 w-full justify-items-start items-start">
+            <SciFiCard delay={0.1} title="WORKSHOPS" desc="Hands-on sessions to learn<br/>new tech, tools, and<br/>languages." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="3" width="36" height="26" rx="3"/><path d="M2 34h44l-3 5H5z"/><path d="M19 12l-5 6 5 6" stroke="#3D9BFF"/><path d="M29 12l5 6-5 6" stroke="#FF5A4F"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/>
+            <SciFiCard delay={0.2} title="HACKATHONS" desc="Build real projects under<br/>pressure, as a team." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M2 36c0-6 3-10 8-10"/><circle cx="38" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M46 36c0-6-3-10-8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/></svg>} accent={<><path d="M.5 52V14L14 .5H52" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M262.5 135v38L249 186.5H211" stroke="#B48CFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" /></>}/>
+            <SciFiCard delay={0.3} title="TALK SHOWS" desc="Learn from voices in tech,<br/>on your campus." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="18" y="2" width="12" height="22" rx="6" stroke="#3D9BFF" className="group-hover:stroke-white transition-colors duration-500"/><path d="M12 20c0 7 5 11 12 11s12-4 12-11M24 31v9M17 40h14"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/>
+            <SciFiCard delay={0.4} title="CODE FEST" desc="Compete, showcase, and<br/>celebrate code." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3h20v12a10 10 0 0 1-20 0z"/><path d="M14 7H6c0 7 3 10 8 10M34 7h8c0 7-3 10-8 10M24 25v8M16 40h16M18 33h12v7"/><path d="M24 8l1.6 3.2 3.4.5-2.5 2.4.6 3.4-3.1-1.6-3.1 1.6.6-3.4-2.5-2.4 3.4-.5z" stroke="#FF5A4F" strokeWidth="1" className="group-hover:stroke-white transition-colors duration-500"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#3D9BFF] transition-colors duration-500" />}/>
+          </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }} className="mt-12">
+            <button className="group relative inline-flex items-center justify-center gap-4 w-[256px] h-[44px] rounded-full border border-transparent text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden card-hover transition-transform duration-300 hover:scale-105" style={{ background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box' }}>
+              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">CATCH US IN ACTION</span>
+              <svg width="16" height="10" viewBox="0 0 18 12" fill="none" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            </button>
           </motion.div>
         </SharedContainer>
       </section>
 
-      {/* ── EVENTS ─────────────────────────────────────────────────── */}
-      <section id="events" className="relative w-full py-24 md:py-32 z-10 scroll-mt-[96px]">
-        <SharedContainer className="w-full">
-          <SectionLabel index={3} label="Events" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10"
-          >
-            <h2 className="font-display font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] tracking-tight text-white">
-              What We Ship.
-            </h2>
-            <p className="text-[#8A90A0] text-[14px] mt-3 max-w-[440px] leading-[1.7]">
-              Workshops, hackathons, talk shows, and code fests. Something ships every semester.
-            </p>
+      <section id="team" className="relative w-full py-24 md:py-32 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
+        <SharedContainer className="w-full relative z-20">
+          <div className="flex justify-between items-center w-full mb-8">
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] whitespace-nowrap">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+              <span className="text-[#C9CED8] uppercase font-medium">OUR TEAM</span>
+            </motion.div>
+          </div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full aspect-[2.4/1] min-h-[140px] sm:min-h-[220px] md:min-h-[280px] mt-4 group transition-all duration-500 hover:scale-[1.01] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
+            <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#10162A] to-[#080B16]" style={{ clipPath: 'polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)' }}>
+               <div id="team-fallback-ui" className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-[#8A90A0] text-[11px] tracking-[0.25em] uppercase z-0">
+                  <svg width="46" height="40" viewBox="0 0 48 44" fill="none" stroke="#6B7286" strokeWidth="1.4" strokeLinecap="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5"/><path d="M2 36c0-6 3-10 8-10"/><circle cx="38" cy="17" r="4.5"/><path d="M46 36c0-6-3-10-8-10"/></svg>
+                  <span>Team group photo</span>
+                  <span className="normal-case text-[10px] tracking-[0.18em] text-[#5E6474]">team_photo.jpg</span>
+               </div>
+               <img src="/assets/team_photo.jpg" alt="Team Photo" className="absolute inset-0 w-full h-full object-cover object-[center_30%] z-10 opacity-100 transition-all duration-700 ease-out" onLoad={() => { const el = document.getElementById('team-fallback-ui'); if(el) el.style.display='none'; }} onError={(e) => e.target.style.display='none'} />
+            </div>
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1118 468" fill="none" preserveAspectRatio="none">
+              <path d="M18 .5H1117.5V450L1100 467.5H.5V18Z" stroke="rgba(255,255,255,.14)" className="group-hover:stroke-white/30 transition-colors duration-500" />
+              <path d="M.5 90V18L18 .5H90M1117.5 378v72L1100 467.5H1028" stroke="url(#team-g)" strokeWidth="1.8" />
+              <defs>
+                <linearGradient id="team-g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#3D9BFF" />
+                  <stop offset="1" stopColor="#FF5A4F" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-12">
+            <Link
+              to="/team"
+              className="group relative inline-flex items-center justify-center gap-2 w-[216px] h-[44px] rounded-full text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden transition-transform duration-300 hover:scale-105"
+              style={{
+                background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box',
+                border: '1px solid transparent',
+              }}
+            >
+              <span className="relative z-10">MEET THE CREW</span>
+              <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            </Link>
           </motion.div>
         </SharedContainer>
+      </section>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="relative w-full"
-        >
-          <EventCarousel events={EVENTS_DATA} />
+      <section id="events" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
+        <div className="flex justify-between items-center w-full mb-12">
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] whitespace-nowrap">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+            <span className="text-[#C9CED8] uppercase font-medium">EVENTS</span>
+          </motion.div>
+        </div>
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="relative w-[100vw] left-1/2 -translate-x-1/2 mask-edges">
+            <EventCarousel events={EVENTS_DATA} />
+            <div className="mt-8 text-center text-[#8A90A0] text-[10px] md:text-[11px] tracking-[0.3em] font-medium uppercase flex items-center justify-center gap-2">
+              DRAG TO SPIN <span className="mx-2 text-[#5E6474]">•</span> SCROLL TO EXPLORE
+            </div>
+          </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-12">
+          <Link to="/events" className="group relative inline-flex items-center justify-center gap-4 w-[216px] h-[44px] rounded-full border border-transparent text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden  card-hover transition-transform duration-300 hover:scale-105" style={{ background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box' }}>
+            <span className="relative z-10">SEE ALL EVENTS</span>
+            <svg width="16" height="10" viewBox="0 0 18 12" fill="none" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
+
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+          </Link>
         </motion.div>
-
-        <SharedContainer className="mt-8">
-          <SharpButton to="/events" variant="primary">
-            All Events
-            <svg width="14" height="9" viewBox="0 0 18 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
-          </SharpButton>
-        </SharedContainer>
       </section>
 
       <Footer />
     </div>
   );
 };
+
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -687,7 +621,7 @@ export default function App() {
         {/* Matrix rain overlay above video, below content */}
         <BackgroundCodeRain opacity={0.38} />
         {/* Dark fade overlay for bottom readability */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(4,6,12,0.20) 0%, transparent 40%, rgba(4,6,12,0.85) 100%)', pointerEvents: 'none' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 0%, transparent 45%, rgba(4,6,12,0.85) 100%)', pointerEvents: 'none' }} />
       </div>
 
       <div className="relative z-10 w-full flex-1">
