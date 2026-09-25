@@ -13,10 +13,10 @@ const FeaturedEventCard = ({ event }) => {
       href={targetUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0e1c]/80 backdrop-blur-sm p-5 md:p-6 transition-all duration-250 ease-out hover:scale-[1.02] hover:border-[#3D9BFF]/50 hover:shadow-[0_0_24px_rgba(61,155,255,0.25)] mb-12"
+      className="group relative block w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0e1c]/80 backdrop-blur-sm p-4 sm:p-5 md:p-6 transition-all duration-250 ease-out hover:scale-[1.02] hover:border-[#3D9BFF]/50 hover:shadow-[0_0_24px_rgba(61,155,255,0.25)] mb-8 md:mb-12"
     >
       <div
-        className="relative w-full h-[360px] md:h-[420px] overflow-hidden bg-[#070a14] mb-4 border border-white/5 flex items-center justify-center"
+        className="relative w-full h-[240px] sm:h-[320px] md:h-[420px] overflow-hidden bg-[#070a14] mb-4 border border-white/5 flex items-center justify-center"
         style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
         {/* Subtle blurred backdrop fill matching poster colors */}
@@ -38,7 +38,7 @@ const FeaturedEventCard = ({ event }) => {
         <span className="font-sans font-medium text-[11px] tracking-[0.2em] text-[#FF5A4F] uppercase mb-1">
           {event.dateLabel}
         </span>
-        <h2 className="font-display font-extrabold text-[28px] md:text-[32px] uppercase leading-tight text-white group-hover:text-[#3D9BFF] transition-colors">
+        <h2 className="font-display font-extrabold text-[22px] sm:text-[28px] md:text-[32px] uppercase leading-tight text-white group-hover:text-[#3D9BFF] transition-colors">
           {event.name}
         </h2>
       </div>
@@ -58,7 +58,7 @@ const GridEventCard = ({ event }) => {
       className="group relative block w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0e1c]/80 backdrop-blur-sm p-4 md:p-5 transition-all duration-250 ease-out hover:scale-[1.02] hover:border-[#3D9BFF]/50 hover:shadow-[0_0_24px_rgba(61,155,255,0.25)]"
     >
       <div
-        className="relative w-full h-[280px] md:h-[320px] overflow-hidden bg-[#070a14] border border-white/5 flex items-center justify-center"
+        className="relative w-full h-[220px] sm:h-[260px] md:h-[320px] overflow-hidden bg-[#070a14] border border-white/5 flex items-center justify-center"
         style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
         {/* Subtle blurred backdrop fill matching poster colors */}
@@ -81,7 +81,7 @@ const GridEventCard = ({ event }) => {
       </div>
 
       <div className="flex flex-col mt-3">
-        <h3 className="font-display font-extrabold text-[24px] md:text-[26px] uppercase leading-tight text-white group-hover:text-[#3D9BFF] transition-colors mb-1">
+        <h3 className="font-display font-extrabold text-[20px] sm:text-[24px] md:text-[26px] uppercase leading-tight text-white group-hover:text-[#3D9BFF] transition-colors mb-1">
           {event.name}
         </h3>
         <span className="font-sans font-medium text-[11px] tracking-[0.2em] text-[#FF5A4F] uppercase">
@@ -112,7 +112,7 @@ export const EventsPage = () => {
     : [...upcomingEvents, ...pastEvents];
 
   return (
-    <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full">
+    <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full overflow-hidden">
       {/* Background Video */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-black overflow-hidden opacity-35">
         <video
@@ -128,10 +128,10 @@ export const EventsPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/40 via-transparent to-[#04060C]" />
       </div>
 
-      <div className="relative z-10 w-full flex-1 pt-32 pb-20">
+      <div className="relative z-10 w-full flex-1 pt-28 md:pt-32 pb-16 md:pb-20">
         <SharedContainer>
           {/* Back to Home Link */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <Link
               to="/"
               className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-medium group"
@@ -150,9 +150,9 @@ export const EventsPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-12 text-center"
+            className="mb-8 md:mb-12 text-center"
           >
-            <h1 className="font-display font-extrabold text-5xl md:text-7xl uppercase tracking-tighter text-white mb-4">
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
               COHO <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">EVENTS</span>
             </h1>
             <p className="text-[#8A90A0] max-w-2xl mx-auto tracking-wide font-light text-sm md:text-base">
@@ -166,7 +166,7 @@ export const EventsPage = () => {
           )}
 
           {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full">
             {gridEvents.map((event, index) => (
               <GridEventCard key={index} event={event} />
             ))}
