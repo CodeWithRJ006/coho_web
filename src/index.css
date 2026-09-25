@@ -10,8 +10,10 @@
   --color-dim: #5E6474;
   --color-highlight: #E4E8F0;
 
-  --font-display: 'Outfit', 'Inter', sans-serif;
-  --font-body: 'Inter', 'Outfit', sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
@@ -60,6 +62,10 @@ a, button {
 
 .font-display {
   font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 /* Event Reel Animations & Masks */

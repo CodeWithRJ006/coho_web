@@ -165,17 +165,17 @@ const DomainTile = ({ domain, index }) => {
     >
       <div className="flex items-start justify-between mb-3">
         <span
-          className="font-mono text-[9px] tracking-[0.3em] px-2 py-0.5 border font-bold"
+          className="font-mono text-[10px] tracking-[0.25em] px-2 py-0.5 border font-semibold"
           style={{ color: domain.accent, borderColor: `${domain.accent}40` }}
         >
           [{domain.tag}]
         </span>
-        <span className="font-mono text-[9px] text-[#2d3342]">{String(index + 1).padStart(2, '0')}</span>
+        <span className="font-mono text-[10px] text-[#3a4254] font-medium">{String(index + 1).padStart(2, '0')}</span>
       </div>
-      <h3 className="font-mono font-medium text-[13px] tracking-[0.15em] text-white uppercase mb-2 group-hover:text-[#E4E8F0] transition-colors">
+      <h3 className="font-display font-bold text-[16px] tracking-[-0.01em] text-white mb-2 group-hover:text-[#E4E8F0] transition-colors">
         {domain.title}
       </h3>
-      <p className="text-[#546e7a] text-[12px] leading-[1.6] font-sans group-hover:text-[#8A90A0] transition-colors">
+      <p className="text-[#8A90A0] text-[13px] leading-[1.65] font-sans group-hover:text-[#C9CED8] transition-colors">
         {domain.desc}
       </p>
     </motion.div>
@@ -288,62 +288,72 @@ const Home = () => {
                     HOPPERS is staggered 0.4s behind CODE
                   */}
 
-                  {/* CODE outline layer (fill=none, draws stroke) */}
+                  {/*
+                    Phase 1 (t=0.15s - 1.25s): CODE and HOPPERS stroke outlines write in AT THE SAME TIME
+                    Phase 2 (t=1.25s): CODE fill immediately floods in
+                    Phase 3 (t=1.75s): HOPPERS fill floods in after a 0.5s delay
+                  */}
+
+                  {/* CODE outline layer - simultaneous stroke write-in */}
                   <motion.text
-                    x="4" y="112"
-                    fontSize="128"
-                    fontFamily="Outfit, Inter, sans-serif"
-                    fontWeight="800"
-                    letterSpacing="-4"
+                    x="4" y="110"
+                    fontSize="126"
+                    fontFamily="'Space Grotesk', sans-serif"
+                    fontWeight="700"
+                    letterSpacing="-2"
                     fill="none"
-                    stroke="white"
-                    strokeWidth="1"
+                    stroke="#FFFFFF"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
                     strokeDasharray="3600 3600"
                     initial={{ strokeDashoffset: 3600 }}
                     animate={{ strokeDashoffset: 0 }}
-                    transition={{ duration: 1.0, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}
+                    transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
                   >CODE</motion.text>
-                  {/* CODE fill layer (fades in after stroke is done) */}
+                  {/* CODE fill layer - floods in right when stroke completes */}
                   <motion.text
-                    x="4" y="112"
-                    fontSize="128"
-                    fontFamily="Outfit, Inter, sans-serif"
-                    fontWeight="800"
-                    letterSpacing="-4"
-                    fill="white"
-                    stroke="none"
+                    x="4" y="110"
+                    fontSize="126"
+                    fontFamily="'Space Grotesk', sans-serif"
+                    fontWeight="700"
+                    letterSpacing="-2"
+                    fill="#FFFFFF"
+                    stroke="#FFFFFF"
+                    strokeWidth="1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 1.05 }}
+                    transition={{ duration: 0.35, delay: 1.25 }}
                   >CODE</motion.text>
 
-                  {/* HOPPERS outline layer */}
+                  {/* HOPPERS outline layer - writes at the EXACT SAME TIME as CODE */}
                   <motion.text
-                    x="4" y="234"
-                    fontSize="128"
-                    fontFamily="Outfit, Inter, sans-serif"
-                    fontWeight="800"
-                    letterSpacing="-4"
+                    x="4" y="230"
+                    fontSize="126"
+                    fontFamily="'Space Grotesk', sans-serif"
+                    fontWeight="700"
+                    letterSpacing="-2"
                     fill="none"
                     stroke="#FF5A4F"
-                    strokeWidth="1"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
                     strokeDasharray="4600 4600"
                     initial={{ strokeDashoffset: 4600 }}
                     animate={{ strokeDashoffset: 0 }}
-                    transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.55 }}
+                    transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
                   >HOPPERS</motion.text>
-                  {/* HOPPERS fill layer */}
+                  {/* HOPPERS fill layer - 0.5s delay before fill floods in */}
                   <motion.text
-                    x="4" y="234"
-                    fontSize="128"
-                    fontFamily="Outfit, Inter, sans-serif"
-                    fontWeight="800"
-                    letterSpacing="-4"
+                    x="4" y="230"
+                    fontSize="126"
+                    fontFamily="'Space Grotesk', sans-serif"
+                    fontWeight="700"
+                    letterSpacing="-2"
                     fill="#FF5A4F"
-                    stroke="none"
+                    stroke="#FF5A4F"
+                    strokeWidth="1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 1.65 }}
+                    transition={{ duration: 0.4, delay: 1.75 }}
                   >HOPPERS</motion.text>
                 </svg>
               </h1>

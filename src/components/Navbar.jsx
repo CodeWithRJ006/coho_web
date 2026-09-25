@@ -115,7 +115,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8">
           <Link
             to="/team"
-            className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors ${
+            className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors ${
               isTeamActive ? 'text-white' : 'text-[#B8BDC9] hover:text-white'
             }`}
           >
@@ -127,7 +127,7 @@ const Navbar = () => {
 
           <Link
             to="/events"
-            className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors ${
+            className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors ${
               isEventsActive ? 'text-white' : 'text-[#B8BDC9] hover:text-white'
             }`}
           >
@@ -140,7 +140,7 @@ const Navbar = () => {
           <a
             href="/#about"
             onClick={handleAboutClick}
-            className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors ${
+            className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors ${
               isAboutActive ? 'text-white' : 'text-[#B8BDC9] hover:text-white'
             }`}
           >
@@ -182,7 +182,7 @@ const Navbar = () => {
               <Link
                 to="/team"
                 onClick={() => setMobileOpen(false)}
-                className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors flex items-center justify-between ${
+                className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors flex items-center justify-between ${
                   isTeamActive ? 'text-white font-semibold' : 'text-[#B8BDC9] hover:text-white'
                 }`}
               >
@@ -194,7 +194,7 @@ const Navbar = () => {
               <Link
                 to="/events"
                 onClick={() => setMobileOpen(false)}
-                className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors flex items-center justify-between ${
+                className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors flex items-center justify-between ${
                   isEventsActive ? 'text-white font-semibold' : 'text-[#B8BDC9] hover:text-white'
                 }`}
               >
@@ -206,7 +206,7 @@ const Navbar = () => {
               <a
                 href="/#about"
                 onClick={handleAboutClick}
-                className={`relative text-[12px] tracking-[0.22em] font-medium uppercase transition-colors flex items-center justify-between ${
+                className={`relative font-mono text-[11px] tracking-[0.22em] uppercase font-medium transition-colors flex items-center justify-between ${
                   isAboutActive ? 'text-white font-semibold' : 'text-[#B8BDC9] hover:text-white'
                 }`}
               >
