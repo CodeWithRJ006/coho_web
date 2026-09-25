@@ -11,20 +11,58 @@ import SharedContainer from './components/SharedContainer';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 
-const AnimatedText = ({ text, className = "" }) => {
+const AnimatedText = ({ text, className = "", gradientStyle = "" }) => {
+  const containerRef = useRef(null);
+  const [letterOffsets, setLetterOffsets] = useState([]);
+  const [totalWidth, setTotalWidth] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const updateLayout = () => {
+        if (!containerRef.current) return;
+        const spans = containerRef.current.querySelectorAll('.letter-span');
+        const containerLeft = containerRef.current.getBoundingClientRect().left;
+        const offsets = [];
+        spans.forEach((span) => {
+          const spanLeft = span.getBoundingClientRect().left;
+          offsets.push(spanLeft - containerLeft);
+        });
+        setLetterOffsets(offsets);
+        setTotalWidth(containerRef.current.offsetWidth);
+      };
+      updateLayout();
+      window.addEventListener('resize', updateLayout);
+      return () => window.removeEventListener('resize', updateLayout);
+    }
+  }, [text]);
+
   return (
-    <div className={`overflow-hidden flex ${className}`}>
-      {text.split('').map((char, index) => (
-        <motion.span
-          key={index}
-          initial={{ y: '100%', opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-block"
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
-      ))}
+    <div ref={containerRef} className={`overflow-hidden flex ${className}`}>
+      {text.split('').map((char, index) => {
+        const offsetLeft = letterOffsets[index] || 0;
+        const spanStyle = gradientStyle ? {
+          backgroundImage: gradientStyle,
+          backgroundSize: totalWidth ? `${totalWidth}px 100%` : '100% 100%',
+          backgroundPosition: `-${offsetLeft}px 0`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          color: 'transparent',
+        } : {};
+
+        return (
+          <motion.span
+            key={index}
+            initial={{ y: '100%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-block letter-span"
+            style={spanStyle}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        );
+      })}
     </div>
   );
 };
@@ -173,32 +211,85 @@ const Home = () => {
     <div className="w-full">
       <section className="relative w-full h-screen min-h-[750px] flex flex-col z-10 pt-28 md:pt-32">
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060C]/90 via-[#04060C]/40 to-transparent w-[95%] md:w-[65%] z-10 pointer-events-none" />
-        <SharedContainer className="flex flex-col justify-between h-full w-full">
-          <div className="flex-1 flex flex-col justify-center w-full">
+
+        {/* Top-Right HUD */}
+        <div className="hidden lg:flex items-start gap-4 absolute top-[16%] right-[6%] z-30 pointer-events-none">
+          <div className="w-[1px] h-[190px] bg-gradient-to-b from-white/30 to-white/5" />
+          <div className="w-[15px] h-[2px] bg-[#3D9BFF] mt-1.5" />
+          <div className="flex flex-col text-[9.5px] tracking-[0.25em] text-[#8A90A0] leading-[16.5px] font-medium uppercase">
+            <span>PEOPLE</span>
+            <span>IDEAS</span>
+            <span>TECHNOLOGY</span>
+            <span>IMPACT</span>
+          </div>
+          <span className="text-[12px] tracking-[0.1em] text-[#8A90A0] font-medium ml-2">//01</span>
+        </div>
+
+        <SharedContainer className="flex flex-col justify-between h-full w-full relative z-20">
+          <div className="flex-1 flex flex-col justify-center w-full relative">
             <div className="w-full max-w-[650px] pb-8 relative z-30">
-              <h1 className="font-display font-black leading-[0.85] tracking-tighter text-[4rem] sm:text-[6rem] md:text-[7.5rem] lg:text-[8.5rem] mb-6 flex flex-col whitespace-nowrap drop-shadow-2xl">
-                <AnimatedText text="CODE" className="text-white pb-1 md:pb-2" />
-                <AnimatedText text="HOPPERS" className="text-gradient-coral" />
+              {/* Eyebrow */}
+              <div className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.3em] uppercase text-white/90 mb-4">
+                <span>CODEHOPPERS</span>
+                <div className="w-[62px] h-[1px] bg-white/70" />
+                <span>TECHNICAL CLUB</span>
+              </div>
+
+              {/* Headline */}
+              <h1 className="font-display font-extrabold text-[clamp(56px,8.3vw,132px)] leading-[0.93] tracking-[-0.01em] mb-6 flex flex-col whitespace-nowrap drop-shadow-2xl">
+                <AnimatedText
+                  text="CODE"
+                  className="pb-1 md:pb-2"
+                  gradientStyle="linear-gradient(90deg, #F4F8FF 0%, #DCE9FF 40%, #3D7BFF 100%)"
+                />
+                <AnimatedText
+                  text="HOPPERS"
+                  gradientStyle="linear-gradient(180deg, #FF9C8C 0%, #FF5A4D 45%, #FF3535 100%)"
+                />
               </h1>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-base md:text-xl font-medium tracking-wide mb-5 md:mb-6 text-white/90">
+
+              {/* Tagline */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="font-light text-[16px] tracking-[0.11em] text-white mb-5 md:mb-6"
+              >
                 Step in as a learner. Step out as a leader.
               </motion.p>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-[#C9CED8] text-sm md:text-[15px] leading-relaxed max-w-[480px] mb-8 md:mb-10 font-light">
-                A community of like-minded innovators fueled by the power of code.<br className="hidden md:block"/>
-                From your first line of code to your first big idea — CoHo<br className="hidden md:block"/>
-                welcomes every student, from every department, to learn, build,<br className="hidden md:block"/>
+
+              {/* Paragraph */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="font-light text-[14px] leading-[1.35] text-[#C9CED8] max-w-[480px] mb-8 md:mb-10 md:whitespace-nowrap"
+              >
+                A community of like-minded innovators fueled by the power of<br className="hidden md:block" />
+                code. From your first line of code to your first big idea — CoHo<br className="hidden md:block" />
+                welcomes every student, from every department, to learn, build,<br className="hidden md:block" />
                 and grow together.
               </motion.p>
+
+              {/* CTA Button */}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}>
-                <Link to="/events" className="group relative inline-flex items-center gap-4 px-6 py-3 md:px-8 md:py-4 rounded-full border border-[#FF5A4F] text-[10px] md:text-[11px] tracking-[0.15em] font-medium uppercase overflow-hidden transition-all duration-300 bg-[#04060C]/50 backdrop-blur-md">
-                  <span className="relative z-10 text-white">CATCH US IN ACTION</span>
-                  <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1 text-white" />
-                  <div className="absolute inset-0 bg-[#FF5A4F] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                <Link
+                  to="/events"
+                  className="group relative inline-flex items-center justify-center gap-2 w-[217px] h-[40px] rounded-full text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D7BFF) border-box',
+                    border: '1px solid transparent',
+                  }}
+                >
+                  <span className="relative z-10">CATCH US IN ACTION</span>
+                  <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D7BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
                 </Link>
               </motion.div>
             </div>
 
-            <div className="hidden lg:block absolute left-[45%] top-[50%] -translate-y-1/2 w-[480px] xl:w-[580px] pointer-events-none z-20">
+            {/* Astronaut */}
+            <div className="hidden lg:block absolute left-[48%] top-[24%] w-[clamp(210px,19.5vw,360px)] pointer-events-none z-20">
               <Astronaut />
             </div>
           </div>
