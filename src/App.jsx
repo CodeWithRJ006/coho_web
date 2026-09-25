@@ -375,7 +375,7 @@ const Home = () => {
                 <Typewriter
                   text="Code. Create. Conquer."
                   delay={1.8}
-                  speed={34}
+                  speed={12}
                   showCursor={true}
                   cursorChar="▌"
                 />
@@ -388,8 +388,8 @@ const Home = () => {
               >
                 <Typewriter
                   text="A technical club at SMEC where students learn, build, and compete. From your first line of code to your first project launch, CoHo has a place for every developer."
-                  delay={2.6}
-                  speed={16}
+                  delay={2.2}
+                  speed={12}
                   showCursor={true}
                   cursorChar="▌"
                 />
