@@ -18,7 +18,7 @@ export const TEAM_DOMAINS = [
     ]
   },
   {
-    domain: "Intelligent Computing (Python)",
+    domain: "Intelligent Computing [Python]",
     members: [
       { name: "Asmi", role: "Lead", image: "/assets/team/Asmi Deshpande_Lead Python .png" },
       { name: "Praanjali", role: "Co-Lead", image: "/assets/team/T T Praanjali_Python.jpeg" },
@@ -28,7 +28,7 @@ export const TEAM_DOMAINS = [
     ]
   },
   {
-    domain: "Object Oriented Engineering (Java)",
+    domain: "Object Oriented Programming [Java]",
     members: [
       { name: "Bhavadesh", role: "Lead", image: "/assets/team/DANDU BHAVADESH GOUD_ JAVA LEAD.jpg" },
       { name: "K. Siri Chandana", role: "Co-Lead", image: "/assets/team/K. Siri Chandana_CoLead(Java).jpg" },
@@ -38,7 +38,7 @@ export const TEAM_DOMAINS = [
     ]
   },
   {
-    domain: "Core Programming & Algorithms (C++)",
+    domain: "Competitive Programming [C++]",
     members: [
       { name: "Sai Dhanush", role: "Lead", image: "/assets/team/Dhanush_c++_lead.jpg" },
       { name: "Abhinay Kumar Vengala", role: "Co-Lead", image: "/assets/team/Abhinay_Kumar_CPP_Colead.jpeg" },
