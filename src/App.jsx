@@ -123,11 +123,11 @@ const EventCard = ({ e }) => {
       href={targetUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex-none w-[300px] block group mb-4 transition-transform duration-300 hover:-translate-y-2"
+      className="relative flex-none w-[250px] sm:w-[300px] block group mb-4 transition-transform duration-300 hover:-translate-y-2"
     >
       {/* Poster Image Container */}
       <div
-        className="relative w-[300px] h-[330px] overflow-hidden bg-[#0b0f1e] mb-3 border border-white/5 shadow-lg group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-shadow duration-500"
+        className="relative w-[250px] sm:w-[300px] h-[280px] sm:h-[330px] overflow-hidden bg-[#0b0f1e] mb-3 border border-white/5 shadow-lg group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-shadow duration-500"
         style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
         <img
@@ -145,7 +145,7 @@ const EventCard = ({ e }) => {
       </div>
 
       {/* Event Name Below Image */}
-      <h3 className="font-sans font-medium text-[17px] leading-snug text-white group-hover:text-[#3D9BFF] transition-colors line-clamp-2 px-1">
+      <h3 className="font-sans font-medium text-[15px] sm:text-[17px] leading-snug text-white group-hover:text-[#3D9BFF] transition-colors line-clamp-2 px-1">
         {e.name}
       </h3>
     </a>
@@ -157,9 +157,9 @@ const EventCarousel = ({ events }) => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="relative w-[100vw] left-1/2 -translate-x-1/2 h-[440px] overflow-hidden mask-edges film-holes">
+    <div className="relative w-[100vw] left-1/2 -translate-x-1/2 h-[380px] sm:h-[440px] overflow-hidden mask-edges film-holes">
       <div
-        className={`flex gap-[24px] pt-[30px] pb-[10px] w-max ${
+        className={`flex gap-[16px] sm:gap-[24px] pt-[20px] sm:pt-[30px] pb-[10px] w-max ${
           shouldReduceMotion ? '' : 'animate-roll hover-pause'
         }`}
       >
@@ -337,7 +337,7 @@ const Home = () => {
             </motion.div>
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[12px] tracking-[0.1em] text-[#8A8F98]">//03</motion.div>
           </div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full aspect-[2.4/1] min-h-[280px] mt-4 group transition-all duration-500 hover:scale-[1.01] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full aspect-[2.4/1] min-h-[140px] sm:min-h-[220px] md:min-h-[280px] mt-4 group transition-all duration-500 hover:scale-[1.01] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
             <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#10162A] to-[#080B16]" style={{ clipPath: 'polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)' }}>
                <div id="team-fallback-ui" className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-[#8A90A0] text-[11px] tracking-[0.25em] uppercase z-0">
                   <svg width="46" height="40" viewBox="0 0 48 44" fill="none" stroke="#6B7286" strokeWidth="1.4" strokeLinecap="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5"/><path d="M2 36c0-6 3-10 8-10"/><circle cx="38" cy="17" r="4.5"/><path d="M46 36c0-6-3-10-8-10"/></svg>
