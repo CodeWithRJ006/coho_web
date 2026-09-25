@@ -43,7 +43,7 @@ function BackgroundCodeRain({ opacity = 0.22 }) {
       if (currentTime - lastTime < 32) return;
       lastTime = currentTime;
 
-      ctx.fillStyle = 'rgba(4, 6, 12, 0.16)';
+      ctx.fillStyle = 'rgba(4, 6, 12, 0.12)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.font = `${fontSize}px 'JetBrains Mono', 'Courier New', monospace`;
 
@@ -267,57 +267,78 @@ const Home = () => {
                 <span className="text-[#546e7a]">./run platform</span>
               </motion.div>
 
-              {/* Headline - SVG stroke write-in animation */}
+              {/* Headline - ECell-style outline stroke draw-in, then fill solidifies */}
               <h1 className="mb-5 md:mb-6 leading-none" aria-label="Code Hoppers">
                 <svg
-                  viewBox="0 0 700 230"
-                  className="w-full max-w-[min(700px,90vw)]"
-                  fill="none"
+                  viewBox="0 0 720 240"
+                  className="w-full max-w-[min(720px,92vw)]"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
+                  overflow="visible"
                 >
-                  {/* CODE - white stroke write-in then fill */}
+                  {/*
+                    Phase 1 (0 - 1.0s): stroke draws in, fill is transparent = pure outline
+                    Phase 2 (1.0 - 1.5s): fill fades in = text solidifies
+                    HOPPERS is staggered 0.4s behind CODE
+                  */}
+
+                  {/* CODE outline layer (fill=none, draws stroke) */}
                   <motion.text
-                    x="4"
-                    y="115"
-                    fontSize="130"
+                    x="4" y="112"
+                    fontSize="128"
                     fontFamily="Outfit, Inter, sans-serif"
                     fontWeight="800"
                     letterSpacing="-4"
+                    fill="none"
                     stroke="white"
-                    strokeWidth="1.5"
-                    fill="white"
-                    strokeDasharray="3500 3500"
-                    initial={{ strokeDashoffset: 3500, fillOpacity: 0 }}
-                    animate={{ strokeDashoffset: 0, fillOpacity: 1 }}
-                    transition={{
-                      strokeDashoffset: { duration: 1.1, ease: 'easeInOut', delay: 0.1 },
-                      fillOpacity: { duration: 0.5, delay: 0.9 },
-                    }}
-                  >
-                    CODE
-                  </motion.text>
-                  {/* HOPPERS - coral stroke write-in then fill */}
+                    strokeWidth="1"
+                    strokeDasharray="3600 3600"
+                    initial={{ strokeDashoffset: 3600 }}
+                    animate={{ strokeDashoffset: 0 }}
+                    transition={{ duration: 1.0, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}
+                  >CODE</motion.text>
+                  {/* CODE fill layer (fades in after stroke is done) */}
                   <motion.text
-                    x="4"
-                    y="228"
-                    fontSize="130"
+                    x="4" y="112"
+                    fontSize="128"
                     fontFamily="Outfit, Inter, sans-serif"
                     fontWeight="800"
                     letterSpacing="-4"
+                    fill="white"
+                    stroke="none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 1.05 }}
+                  >CODE</motion.text>
+
+                  {/* HOPPERS outline layer */}
+                  <motion.text
+                    x="4" y="234"
+                    fontSize="128"
+                    fontFamily="Outfit, Inter, sans-serif"
+                    fontWeight="800"
+                    letterSpacing="-4"
+                    fill="none"
                     stroke="#FF5A4F"
-                    strokeWidth="1.5"
+                    strokeWidth="1"
+                    strokeDasharray="4600 4600"
+                    initial={{ strokeDashoffset: 4600 }}
+                    animate={{ strokeDashoffset: 0 }}
+                    transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.55 }}
+                  >HOPPERS</motion.text>
+                  {/* HOPPERS fill layer */}
+                  <motion.text
+                    x="4" y="234"
+                    fontSize="128"
+                    fontFamily="Outfit, Inter, sans-serif"
+                    fontWeight="800"
+                    letterSpacing="-4"
                     fill="#FF5A4F"
-                    strokeDasharray="4500 4500"
-                    initial={{ strokeDashoffset: 4500, fillOpacity: 0 }}
-                    animate={{ strokeDashoffset: 0, fillOpacity: 1 }}
-                    transition={{
-                      strokeDashoffset: { duration: 1.3, ease: 'easeInOut', delay: 0.45 },
-                      fillOpacity: { duration: 0.5, delay: 1.55 },
-                    }}
-                  >
-                    HOPPERS
-                  </motion.text>
+                    stroke="none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 1.65 }}
+                  >HOPPERS</motion.text>
                 </svg>
               </h1>
 
@@ -634,7 +655,12 @@ export default function App() {
         {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       </AnimatePresence>
       {!loading && (
-        <div className="bg-[#04060C] text-white relative selection:bg-[#FF5A4F]/30 selection:text-white flex flex-col w-full min-h-screen">
+        <motion.div
+          className="bg-[#04060C] text-white relative selection:bg-[#FF5A4F]/30 selection:text-white flex flex-col w-full min-h-screen"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
 
       <Navbar />
 
@@ -643,7 +669,7 @@ export default function App() {
           <source src="/download.mp4" type="video/mp4" />
         </video>
         {/* Matrix rain overlay above video, below content */}
-        <BackgroundCodeRain opacity={0.22} />
+        <BackgroundCodeRain opacity={0.38} />
         {/* Dark bottom fade so content stays readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/10 via-transparent to-[#04060C]/75" style={{ pointerEvents: 'none' }} />
       </div>
@@ -657,7 +683,7 @@ export default function App() {
           </Routes>
         </ErrorBoundary>
       </div>
-    </div>
+    </motion.div>
       )}
     </>
   );
