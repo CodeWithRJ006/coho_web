@@ -248,6 +248,11 @@ const Home = () => {
 
       {/* ── HERO ───────────────────────────────────────────────────── */}
       <section className="relative w-full h-screen min-h-[700px] md:min-h-[740px] flex flex-col z-10 pt-24 md:pt-28 overflow-hidden">
+        {/* Left-side readability scrim - fades right so matrix rain stays visible on right */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{ background: 'linear-gradient(100deg, rgba(4,6,12,0.88) 0%, rgba(4,6,12,0.70) 45%, rgba(4,6,12,0.15) 70%, transparent 100%)' }}
+        />
 
         <SharedContainer className="flex flex-col justify-between h-full w-full relative z-20">
           <div className="flex-1 flex items-center w-full">
@@ -275,6 +280,7 @@ const Home = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   overflow="visible"
+                  style={{ filter: 'drop-shadow(0 2px 16px rgba(4,6,12,0.95))' }}
                 >
                   {/*
                     Phase 1 (0 - 1.0s): stroke draws in, fill is transparent = pure outline
@@ -347,7 +353,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="font-mono text-[12px] sm:text-[13px] tracking-[0.12em] text-[#C9CED8] mb-4"
+                className="font-mono text-[12px] sm:text-[13px] tracking-[0.12em] text-white mb-4" style={{ textShadow: '0 1px 12px rgba(4,6,12,1)' }}
               >
                 Code. Create. Conquer.
               </motion.p>
@@ -357,7 +363,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.32 }}
-                className="text-[13px] sm:text-[14px] leading-[1.65] text-[#8A90A0] max-w-[460px] mb-7 md:mb-8 font-sans"
+                className="text-[13px] sm:text-[14px] leading-[1.65] text-[#B8BEC9] max-w-[460px] mb-7 md:mb-8 font-sans" style={{ textShadow: '0 1px 10px rgba(4,6,12,1)' }}
               >
                 A technical club at SMEC where students learn, build, and compete.
                 From your first line of code to your first project launch, CoHo
@@ -373,7 +379,7 @@ const Home = () => {
               >
                 {STATS.map((s, i) => (
                   <div key={i} className="flex flex-col items-start">
-                    <span className="text-[16px] sm:text-[18px] font-bold text-white">{s.value}</span>
+                    <span className="text-[16px] sm:text-[18px] font-bold text-white" style={{ textShadow: '0 1px 8px rgba(4,6,12,1)' }}>{s.value}</span>
                     <span className="text-[9px] tracking-[0.18em] text-[#546e7a] uppercase">{s.label}</span>
                   </div>
                 ))}
@@ -670,8 +676,8 @@ export default function App() {
         </video>
         {/* Matrix rain overlay above video, below content */}
         <BackgroundCodeRain opacity={0.38} />
-        {/* Dark bottom fade so content stays readable */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/10 via-transparent to-[#04060C]/75" style={{ pointerEvents: 'none' }} />
+        {/* Dark fade overlay for bottom readability */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(4,6,12,0.20) 0%, transparent 40%, rgba(4,6,12,0.85) 100%)', pointerEvents: 'none' }} />
       </div>
 
       <div className="relative z-10 w-full flex-1">
