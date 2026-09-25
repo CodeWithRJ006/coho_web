@@ -422,11 +422,11 @@ const AccordionRow = ({ domain }) => {
   const isSmallGroup = sortedMembers.length < 5;
 
   return (
-    <div className="w-full flex flex-col mb-14 md:mb-[64px]">
+    <div className="w-full flex flex-col mb-12 md:mb-[64px]">
       {/* Domain Heading */}
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-6 md:mb-8">
         <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
-        <h3 className="font-display font-extrabold text-[24px] md:text-[28px] uppercase tracking-[0.12em] text-white">
+        <h3 className="font-display font-extrabold text-[20px] sm:text-[24px] md:text-[28px] uppercase tracking-[0.08em] sm:tracking-[0.12em] text-white leading-tight break-words">
           {domain.domain}
         </h3>
         <div className="flex-1 h-[1px] bg-gradient-to-r from-white/20 to-transparent ml-4 hidden sm:block" />
@@ -434,8 +434,8 @@ const AccordionRow = ({ domain }) => {
 
       {/* Accordion Row Container */}
       <div
-        className={`w-full flex gap-4 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory event-scrollbar ${
-          isSmallGroup ? 'justify-start' : 'justify-between'
+        className={`w-full flex gap-3.5 md:gap-4 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory event-scrollbar ${
+          isSmallGroup ? 'justify-start' : 'justify-start md:justify-between'
         }`}
       >
         {sortedMembers.map((member, idx) => {
@@ -450,14 +450,14 @@ const AccordionRow = ({ domain }) => {
               tabIndex={0}
               onFocus={() => setActiveMemberIndex(idx)}
               onBlur={() => setActiveMemberIndex(null)}
-              className={`snap-start shrink-0 h-[440px] rounded-[14px] overflow-hidden relative group cursor-pointer border border-white/10 bg-[#0a0e1c] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`snap-start shrink-0 h-[380px] sm:h-[420px] md:h-[440px] rounded-[14px] overflow-hidden relative group cursor-pointer border border-white/10 bg-[#0a0e1c] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isSmallGroup
                   ? isHovered
-                    ? 'w-[320px] md:w-[360px]'
-                    : 'w-[220px] md:w-[240px]'
+                    ? 'w-[260px] sm:w-[300px] md:w-[360px]'
+                    : 'w-[200px] sm:w-[220px] md:w-[240px]'
                   : isHovered
-                  ? 'flex-[3.2] min-w-[280px]'
-                  : 'flex-1 min-w-[140px] md:min-w-0'
+                  ? 'w-[260px] sm:w-[280px] md:flex-[3.2] md:min-w-[280px]'
+                  : 'w-[190px] sm:w-[210px] md:flex-1 md:min-w-0'
               }`}
             >
               {/* Photo Image */}
@@ -477,7 +477,7 @@ const AccordionRow = ({ domain }) => {
                   isHovered ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100'
                 }`}
               >
-                <div className="font-sans font-medium text-[18px] text-white leading-snug mb-1">
+                <div className="font-sans font-medium text-[16px] sm:text-[18px] text-white leading-snug mb-1">
                   {member.name}
                 </div>
                 <div className="font-sans font-medium text-[10px] tracking-[0.2em] text-[#FF5A4F] uppercase">
@@ -491,7 +491,7 @@ const AccordionRow = ({ domain }) => {
                   isHovered ? 'opacity-0' : 'opacity-100 md:group-hover:opacity-0 md:group-focus-within:opacity-0'
                 }`}
               >
-                <div className="font-sans font-medium text-[13px] text-white truncate">
+                <div className="font-sans font-medium text-[12px] sm:text-[13px] text-white truncate">
                   {member.name}
                 </div>
                 <div className="font-sans font-medium text-[9px] tracking-[0.15em] text-[#8A90A0] uppercase truncate">
@@ -552,7 +552,7 @@ const TeamPage = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full">
+    <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full overflow-hidden">
       {/* Background Video */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-black overflow-hidden opacity-35">
         <video
@@ -568,10 +568,10 @@ const TeamPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/40 via-transparent to-[#04060C]" />
       </div>
 
-      <div className="relative z-10 w-full flex-1 pt-32">
+      <div className="relative z-10 w-full flex-1 pt-28 md:pt-32">
         <SharedContainer>
           {/* Back to Home Link */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <Link
               to="/"
               className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-medium group"
@@ -586,8 +586,8 @@ const TeamPage = () => {
           </div>
 
           {/* Page Header */}
-          <div className="mb-16">
-            <h1 className="font-display font-extrabold text-5xl md:text-7xl uppercase tracking-tighter text-white mb-4">
+          <div className="mb-12 md:mb-16">
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
               THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">CREW</span>
             </h1>
             <p className="text-[#8A90A0] text-sm md:text-base max-w-xl tracking-wide font-light">
