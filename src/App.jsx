@@ -185,11 +185,14 @@ const Home = () => {
         <SharedContainer className="flex flex-col justify-between h-full w-full relative z-20">
           <div className="flex-1 flex flex-col justify-center w-full relative">
             <div className="w-full max-w-[650px] pb-8 relative z-30">
-              {/* Eyebrow */}
-              <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-white/90 mb-4 flex-wrap sm:flex-nowrap">
-                <span>CODEHOPPERS</span>
-                <div className="w-[40px] sm:w-[62px] h-[1px] bg-white/70" />
-                <span>TECHNICAL CLUB</span>
+              {/* Eyebrow / Wordmark + Tag Lockup */}
+              <div className="flex items-center gap-3 sm:gap-3.5 mb-4">
+                <span className="font-display font-bold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase text-white">
+                  CODEHOPPERS
+                </span>
+                <span className="px-3 py-0.5 rounded-full border border-[#3D9BFF]/40 text-[#8A90A0] text-[9.5px] sm:text-[10px] font-medium tracking-[0.2em] uppercase bg-[#3D9BFF]/5 shrink-0">
+                  TECHNICAL CLUB
+                </span>
               </div>
 
               {/* Headline */}
