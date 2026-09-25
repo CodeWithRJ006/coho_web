@@ -181,18 +181,6 @@ const Home = () => {
       <section className="relative w-full h-screen min-h-[750px] flex flex-col z-10 pt-28 md:pt-32">
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060C]/90 via-[#04060C]/40 to-transparent w-[95%] md:w-[65%] z-10 pointer-events-none" />
 
-        {/* Top-Right HUD */}
-        <div className="hidden lg:flex items-start gap-4 absolute top-[16%] right-[6%] z-30 pointer-events-none">
-          <div className="w-[1px] h-[190px] bg-gradient-to-b from-white/30 to-white/5" />
-          <div className="w-[15px] h-[2px] bg-[#3D9BFF] mt-1.5" />
-          <div className="flex flex-col text-[9.5px] tracking-[0.25em] text-[#8A90A0] leading-[16.5px] font-medium uppercase">
-            <span>PEOPLE</span>
-            <span>IDEAS</span>
-            <span>TECHNOLOGY</span>
-            <span>IMPACT</span>
-          </div>
-          <span className="text-[12px] tracking-[0.1em] text-[#8A90A0] font-medium ml-2">//01</span>
-        </div>
 
         <SharedContainer className="flex flex-col justify-between h-full w-full relative z-20">
           <div className="flex-1 flex flex-col justify-center w-full relative">
