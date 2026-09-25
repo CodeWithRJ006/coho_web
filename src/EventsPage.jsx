@@ -136,9 +136,9 @@ export const EventsPage = () => {
             </div>
           </div>
         )}
-
-        <Footer />
       </SharedContainer>
+
+      <Footer />
     </div>
   );
 };
