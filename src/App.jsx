@@ -145,7 +145,7 @@ const STATS = [
 // ── Sharp CTA Button ───────────────────────────────────────────────────────────
 const SharpButton = ({ children, href, to, onClick, variant = 'primary', className = '' }) => {
   const cls = [
-    'inline-flex items-center gap-3 px-6 py-2.5 font-mono text-[11px] tracking-[0.18em] uppercase font-medium transition-colors duration-200',
+    'inline-flex items-center justify-center gap-3 px-5 sm:px-6 py-2.5 font-mono text-[10.5px] sm:text-[11px] tracking-[0.18em] uppercase font-medium transition-colors duration-200 w-full sm:w-auto',
     variant === 'primary'
       ? 'border border-[#FF5A4F] text-[#FF5A4F] hover:bg-[#FF5A4F] hover:text-[#04060C]'
       : 'border border-white/20 text-white hover:border-white hover:text-white',
@@ -172,7 +172,7 @@ const SciFiCard = ({ delay, title, desc, icon, accent }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.8, delay }}
-      className="relative group w-[263px] h-[187px] card-hover shrink-0"
+      className="relative group w-full max-w-[280px] sm:max-w-none sm:w-[263px] h-[187px] card-hover shrink-0"
     >
       <div
         className="absolute inset-0 bg-[#0a0e1c] overflow-hidden"
@@ -400,7 +400,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.44 }}
-                className="flex items-center gap-5 sm:gap-7 mb-8 font-mono"
+                className="flex items-center gap-4 sm:gap-7 mb-8 font-mono flex-wrap"
               >
                 {STATS.map((s, i) => (
                   <div key={i} className="flex flex-col items-start">
@@ -465,7 +465,7 @@ const Home = () => {
               </div>
             </motion.div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-x-[40px] gap-y-6 md:gap-y-8 w-full justify-items-start items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-x-[40px] gap-y-6 md:gap-y-8 w-full justify-items-center sm:justify-items-start items-start">
             <SciFiCard delay={0.1} title="WORKSHOPS" desc="Hands-on sessions to learn<br/>new tech, tools, and<br/>languages." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="3" width="36" height="26" rx="3" /><path d="M2 34h44l-3 5H5z" /><path d="M19 12l-5 6 5 6" stroke="#3D9BFF" /><path d="M29 12l5 6-5 6" stroke="#FF5A4F" /></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />} />
             <SciFiCard delay={0.2} title="HACKATHONS" desc="Build real projects under<br/>pressure, as a team." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="24" cy="12" r="6" /><path d="M12 38c0-8 5-13 12-13s12 5 12 13z" /><circle cx="10" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M2 36c0-6 3-10 8-10" /><circle cx="38" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M46 36c0-6-3-10-8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /></svg>} accent={<><path d="M.5 52V14L14 .5H52" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M262.5 135v38L249 186.5H211" stroke="#B48CFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" /></>} />
             <SciFiCard delay={0.3} title="TALK SHOWS" desc="Learn from voices in tech,<br/>on your campus." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="18" y="2" width="12" height="22" rx="6" stroke="#3D9BFF" className="group-hover:stroke-white transition-colors duration-500" /><path d="M12 20c0 7 5 11 12 11s12-4 12-11M24 31v9M17 40h14" /></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />} />
@@ -590,32 +590,23 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-// ── Role Priority Helper for Ordering ──────────────────────────────────────────
-const getRolePriority = (role = '') => {
-  const r = role.toLowerCase();
-  if (r.includes('president') && !r.includes('vice')) return 1;
-  if (r.includes('vice president')) return 2;
-  if (r.includes('general secretary')) return 3;
-  if (r.includes('treasurer')) return 4;
-  if (r.includes('lead advisor')) return 5;
-  if (r.includes('advisor')) return 6;
-  if (r.includes('lead') && !r.includes('co-lead')) return 7;
-  if (r.includes('co-lead')) return 8;
-  return 10;
-};
-
 // ── Domain Icons & Data for Rotary Wheel ───────────────────────────────────────
 const DOMAIN_ROTARY_ITEMS = [
   {
-    key: "management",
-    id: "domain-management",
-    label: "MANAGEMENT",
+    key: "leadership",
+    id: "domain-leadership",
+    label: "LEADERSHIP",
     match: "Management",
     color: "#FF5A4F",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 18h20L19 7l-5 5-2-6-2 6-5-5-3 11z"/>
-        <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+      // Sleek, regal 3-peak royal crown with finials, jewel nodes, and arched base
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 19h18" strokeWidth="2" />
+        <path d="M4 19L2.5 8.5l5.5 4 4-8.5 4 8.5 5.5-4L20 19H4z" fill="currentColor" fillOpacity="0.2" />
+        <circle cx="2.5" cy="8.5" r="1.2" fill="currentColor" />
+        <circle cx="12" cy="4" r="1.4" fill="currentColor" />
+        <circle cx="21.5" cy="8.5" r="1.2" fill="currentColor" />
+        <path d="M8 15.5h8" strokeWidth="1.2" strokeOpacity="0.6" />
       </svg>
     )
   },
@@ -626,9 +617,13 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Advisory",
     color: "#3D9BFF",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <polygon points="12 4 14 10 20 12 14 14 12 20 10 14 4 12 10 10" fill="currentColor" fillOpacity="0.3"/>
+      // Lightbulb with filament, glowing arc rays, and base
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18h6" />
+        <path d="M10 21h4" />
+        <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.7 3.5 6h7c2-1.3 3.5-3.5 3.5-6a7 7 0 0 0-7-7z" fill="currentColor" fillOpacity="0.18" />
+        <path d="M9.5 9a2.5 2.5 0 0 1 5 0" strokeOpacity="0.75" />
+        <line x1="12" y1="11.5" x2="12" y2="15" strokeOpacity="0.7" />
       </svg>
     )
   },
@@ -639,7 +634,8 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Python",
     color: "#FFD43B",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+      // Scaled up official Python dual snakes
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
         <path d="M11.9 2c-3.1 0-2.9 1.3-2.9 1.3l.01 1.4h3v.4H6.8S4 4.8 4 8c0 3.2 1.7 3.1 1.7 3.1h1v-1.5c0-1.7 1.4-1.7 1.4-1.7h5.1c1.4 0 1.4-1.3 1.4-1.3V4.7s.3-2.7-2.7-2.7h-1zm-1.7 1.2c.4 0 .7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7z" fill="#387EB8"/>
         <path d="M12.1 22c3.1 0 2.9-1.3 2.9-1.3l-.01-1.4h-3v-.4h5.2s2.8.3 2.8-2.9c0-3.2-1.7-3.1-1.7-3.1h-1v1.5c0 1.7-1.4 1.7-1.4 1.7H9.8c-1.4 0-1.4 1.3-1.4 1.3v3.9s-.3 2.7 2.7 2.7h1zm1.7-1.2c-.4 0-.7-.3-.7-.7s.3-.7.7-.7.7.3.7.7-.3.7-.7.7z" fill="#FFE052"/>
       </svg>
@@ -652,12 +648,13 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Java",
     color: "#F89820",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-        <line x1="6" y1="2" x2="6" y2="5" stroke="#FF5A4F"/>
-        <line x1="10" y1="1" x2="10" y2="5" stroke="#F89820"/>
-        <line x1="14" y1="2" x2="14" y2="5" stroke="#3D9BFF"/>
+      // Scaled up Java coffee cup with steam
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" fill="#F89820" fillOpacity="0.15" />
+        <line x1="6" y1="1.5" x2="6" y2="5" stroke="#FF5A4F" />
+        <line x1="10" y1="1" x2="10" y2="5" stroke="#F89820" />
+        <line x1="14" y1="1.5" x2="14" y2="5" stroke="#3D9BFF" />
       </svg>
     )
   },
@@ -666,11 +663,12 @@ const DOMAIN_ROTARY_ITEMS = [
     id: "domain-cpp",
     label: "C++",
     match: "C++",
-    color: "#00599C",
+    color: "#007ACC",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
-        <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="#3D9BFF" strokeWidth="1.5" fill="#00599C" fillOpacity="0.4"/>
-        <text x="12" y="15" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="900" fontFamily="monospace">C++</text>
+      // Scaled up C++ shield/hexagon
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
+        <path d="M12 2L2.5 7.2v9.6L12 22l9.5-5.2V7.2L12 2z" stroke="#3D9BFF" strokeWidth="1.7" fill="#00599C" fillOpacity="0.3" />
+        <text x="12" y="15.5" textAnchor="middle" fill="#FFFFFF" fontSize="8.5" fontWeight="900" fontFamily="monospace">C++</text>
       </svg>
     )
   },
@@ -681,11 +679,12 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Web",
     color: "#00d4cc",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M8 10l-2 2 2 2"/>
-        <path d="M16 10l2 2-2 2"/>
-        <line x1="13" y1="9" x2="11" y2="15"/>
+      // Code brackets globe
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M7.5 10l-2.5 2 2.5 2" />
+        <path d="M16.5 10l2.5 2-2.5 2" />
+        <line x1="13.5" y1="8.5" x2="10.5" y2="15.5" />
       </svg>
     )
   },
@@ -696,10 +695,11 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Marketing",
     color: "#ffaa00",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 11l14-5v12L3 13v-2z"/>
-        <path d="M17 9a4 4 0 0 1 0 6"/>
-        <path d="M7 13v5a2 2 0 0 0 2 2h1"/>
+      // Megaphone broadcast wave
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 11l14-5v12L3 13v-2z" fill="currentColor" fillOpacity="0.15" />
+        <path d="M17 8.5a4.5 4.5 0 0 1 0 7" />
+        <path d="M7 13v5a2 2 0 0 0 2 2h1" />
       </svg>
     )
   },
@@ -708,12 +708,13 @@ const DOMAIN_ROTARY_ITEMS = [
     id: "domain-design",
     label: "DESIGN",
     match: "Design",
-    color: "#FF7262",
+    color: "#FF5A4F",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 19l7-7 3 3-7 7-3-3z"/>
-        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/>
-        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      // Artist paintbrush with angled bristle tip and ferrule
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18.37 2.63a2.5 2.5 0 0 1 3.54 3.54L11 17l-4.5.5.5-4.5L18.37 2.63z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M14.5 6.5l3 3" />
+        <path d="M2.5 21.5c1-2 3-2.5 4.5-2.5s2.5.5 3.5 2.5c-2.5 1.5-6.5 1.5-8 0z" fill="currentColor" fillOpacity="0.5" />
       </svg>
     )
   },
@@ -724,30 +725,32 @@ const DOMAIN_ROTARY_ITEMS = [
     match: "Media",
     color: "#c792ea",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M14.3 8l5.7 10"/>
-        <path d="M9.7 8h11.5"/>
-        <path d="M7.4 12l5.7-10"/>
-        <path d="M9.7 16L4 6.1"/>
-        <path d="M14.3 16H2.8"/>
-        <path d="M16.6 12l-5.7 10"/>
+      // Camera aperture lens
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9.5" />
+        <path d="M14.3 8l5.7 10" />
+        <path d="M9.7 8h11.5" />
+        <path d="M7.4 12l5.7-10" />
+        <path d="M9.7 16L4 6.1" />
+        <path d="M14.3 16H2.8" />
+        <path d="M16.6 12l-5.7 10" />
       </svg>
     )
   },
   {
     key: "logistics",
     id: "domain-logistics",
-    label: "EVENTS & LOGISTICS",
+    label: "LOGISTICS",
     match: "Logistics",
     color: "#00ff88",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/>
-        <line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-        <circle cx="12" cy="15" r="2" fill="currentColor"/>
+      // Calendar / speedrun logistics package
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="currentColor" fillOpacity="0.15" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+        <circle cx="12" cy="16" r="2" fill="currentColor" />
       </svg>
     )
   }
@@ -755,55 +758,37 @@ const DOMAIN_ROTARY_ITEMS = [
 
 // ── Semi-Circle Rotary Wheel Scrollbar ─────────────────────────────────────────
 function RotaryWheelScrollbar({ activeIndex, onSelect }) {
-  // Center of wheel is on right screen edge (x = 160, y = 160)
-  // Radius R = 120px
-  const R = 120;
-  const cx = 160;
-  const cy = 160;
+  // Center of wheel on right screen edge (cx = 180, cy = 180)
+  // Radius R = 138px
+  const R = 138;
+  const cx = 180;
+  const cy = 180;
   const activeItem = DOMAIN_ROTARY_ITEMS[activeIndex] || DOMAIN_ROTARY_ITEMS[0];
 
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:flex items-center pointer-events-none select-none">
-      {/* Active Domain Label Callout Tag (Extending left into screen) */}
-      <div className="mr-3 flex items-center gap-2 pointer-events-auto">
-        <div
-          className="px-2.5 py-1 bg-[#04060C]/95 border font-mono text-[10px] tracking-[0.18em] uppercase font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md"
-          style={{
-            borderColor: activeItem.color,
-            color: activeItem.color,
-            boxShadow: `0 0 20px ${activeItem.color}33`,
-          }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: activeItem.color }} />
-          <span>{activeItem.label}</span>
-          <span className="text-white/30 text-[9px]">{`0${activeIndex + 1}`}</span>
-        </div>
-        {/* Needle pointer */}
-        <div className="w-3 h-px" style={{ backgroundColor: activeItem.color }} />
-      </div>
-
-      {/* SVG Rotary Wheel Arc */}
-      <div className="relative w-[160px] h-[320px] pointer-events-auto">
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden lg:flex items-center pointer-events-none select-none">
+      {/* SVG Rotary Wheel Arc Container */}
+      <div className="relative w-[180px] h-[360px] pointer-events-auto overflow-visible">
         <svg
-          viewBox="0 0 160 320"
+          viewBox="0 0 180 360"
           className="w-full h-full overflow-visible"
         >
           <defs>
-            <radialGradient id="rotary-glow" cx="100%" cy="50%" r="70%">
-              <stop offset="0%" stopColor="#3D9BFF" stopOpacity="0.15" />
+            <radialGradient id="rotary-glow" cx="100%" cy="50%" r="75%">
+              <stop offset="0%" stopColor={activeItem.color} stopOpacity="0.18" />
               <stop offset="100%" stopColor="#04060C" stopOpacity="0" />
             </radialGradient>
           </defs>
 
           {/* Semi-circle glow fill */}
           <path
-            d="M 160 40 A 120 120 0 0 0 160 280 Z"
+            d="M 180 35 A 145 145 0 0 0 180 325 Z"
             fill="url(#rotary-glow)"
           />
 
           {/* Outer dashed rotary track */}
           <path
-            d="M 160 30 A 130 130 0 0 0 160 290"
+            d="M 180 25 A 155 155 0 0 0 180 335"
             fill="none"
             stroke="rgba(255,255,255,0.08)"
             strokeWidth="1"
@@ -812,38 +797,55 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
 
           {/* Main solid curved track */}
           <path
-            d="M 160 40 A 120 120 0 0 0 160 280"
+            d="M 180 42 A 138 138 0 0 0 180 318"
             fill="none"
             stroke="rgba(255,255,255,0.18)"
-            strokeWidth="1.5"
+            strokeWidth="1.8"
           />
 
           {/* Inner tick track */}
           <path
-            d="M 160 55 A 105 105 0 0 0 160 265"
+            d="M 180 62 A 118 118 0 0 0 180 298"
             fill="none"
             stroke="rgba(255,255,255,0.06)"
             strokeWidth="1"
           />
 
-          {/* Focal Reticle at Apex (x = 40, y = 160) */}
+          {/* Focal Reticle at Apex (x = 42, y = 180) */}
           <g transform={`translate(${cx - R}, ${cy})`}>
-            {/* Reticle brackets */}
-            <path d="M -8 -16 L -14 -16 L -14 16 L -8 16" fill="none" stroke={activeItem.color} strokeWidth="1.5" />
-            <path d="M 8 -16 L 14 -16 L 14 16 L 8 16" fill="none" stroke={activeItem.color} strokeWidth="1.5" />
-            {/* Center tick indicator */}
-            <circle cx="0" cy="0" r="18" fill="#04060C" stroke={activeItem.color} strokeWidth="1.8" />
+            {/* Reticle brackets around active logo */}
+            <path d="M -12 -22 L -20 -22 L -20 22 L -12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+            <path d="M 12 -22 L 20 -22 L 20 22 L 12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+            {/* Center tick indicator ring */}
+            <circle cx="0" cy="0" r="24" fill="#04060C" stroke={activeItem.color} strokeWidth="2" />
           </g>
         </svg>
 
+        {/* Text inside the circle: placed INSIDE the hollow inner cavity of the semi-circle */}
+        <div
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 pointer-events-none flex flex-col items-center justify-center text-center max-w-[88px]"
+        >
+          <span
+            className="font-mono text-[9px] tracking-[0.16em] font-black uppercase px-2 py-0.5 border"
+            style={{
+              color: activeItem.color,
+              borderColor: `${activeItem.color}60`,
+              backgroundColor: 'rgba(4,6,12,0.92)',
+              boxShadow: `0 0 16px ${activeItem.color}35`,
+            }}
+          >
+            {activeItem.label}
+          </span>
+          <span className="text-[8px] font-mono text-[#546e7a] tracking-widest mt-1">
+            {`0${activeIndex + 1}/10`}
+          </span>
+        </div>
+
         {/* Rotary Domain Nodes placed along the curve */}
         {DOMAIN_ROTARY_ITEMS.map((item, idx) => {
-          // Calculate angle relative to activeIndex
-          // Apex (active) is at phi = 0
           const delta = idx - activeIndex;
-          const phi = delta * 0.42; // radians per item
+          const phi = delta * 0.42; // radians per node
 
-          // Only render if reasonably visible within the semi-circle (-1.3 to +1.3 rad)
           if (Math.abs(phi) > 1.25) return null;
 
           const x = cx - R * Math.cos(phi);
@@ -857,8 +859,8 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
               title={item.label}
               className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
                 isActive
-                  ? "w-8 h-8 z-30 shadow-lg scale-110"
-                  : "w-6 h-6 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white hover:scale-110"
+                  ? "w-12 h-12 z-30 shadow-xl scale-105"
+                  : "w-9 h-9 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white hover:scale-110"
               }`}
               style={{
                 left: `${x}px`,
@@ -866,7 +868,7 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
                 backgroundColor: isActive ? "#04060C" : undefined,
                 borderColor: isActive ? item.color : undefined,
                 color: isActive ? item.color : undefined,
-                boxShadow: isActive ? `0 0 15px ${item.color}66` : undefined,
+                boxShadow: isActive ? `0 0 20px ${item.color}77` : undefined,
               }}
             >
               {item.icon}
@@ -877,7 +879,6 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
     </div>
   );
 }
-
 
 // ── Clean Member Card (No zooming, natural framing, persistent info) ─────────
 const CleanMemberCard = ({ member, index }) => {
@@ -891,11 +892,11 @@ const CleanMemberCard = ({ member, index }) => {
   return (
     <div className="relative w-full rounded-none overflow-hidden border border-white/10 bg-[#070913] flex flex-col transition-colors duration-200 hover:border-white/30">
       {/* Top Cyber Telemetry Bar */}
-      <div className="flex items-center justify-between px-3 py-1.5 bg-[#04060C] border-b border-white/8 text-[10px] font-mono">
+      <div className="flex items-center justify-between px-2.5 sm:px-3 py-1.5 bg-[#04060C] border-b border-white/8 text-[9.5px] sm:text-[10px] font-mono">
         <span className="text-[#546e7a]">NODE:{nodeHex}</span>
         <div className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88]" />
-          <span className="text-[#546e7a] text-[9px]">ONLINE</span>
+          <span className="text-[#546e7a] text-[8.5px] sm:text-[9px]">ONLINE</span>
         </div>
       </div>
 
@@ -915,12 +916,12 @@ const CleanMemberCard = ({ member, index }) => {
       </div>
 
       {/* Persistent Info Section below photo - ALWAYS VISIBLE, NO HOVER REVEAL */}
-      <div className="p-3.5 bg-[#070913] border-t border-white/8 flex flex-col justify-between flex-1">
+      <div className="p-2.5 sm:p-3.5 bg-[#070913] border-t border-white/8 flex flex-col justify-between flex-1">
         <div>
           {/* Role badge */}
-          <div className="mb-2">
+          <div className="mb-1.5 sm:mb-2">
             <span
-              className={`inline-block font-mono text-[9.5px] px-2 py-0.5 border font-semibold tracking-wider uppercase ${
+              className={`inline-block font-mono text-[8.5px] sm:text-[9.5px] px-1.5 sm:px-2 py-0.5 border font-semibold tracking-wider uppercase ${
                 isLead
                   ? 'bg-[#FF5A4F]/12 text-[#FF5A4F] border-[#FF5A4F]/40'
                   : 'bg-[#3D9BFF]/12 text-[#3D9BFF] border-[#3D9BFF]/40'
@@ -931,13 +932,13 @@ const CleanMemberCard = ({ member, index }) => {
           </div>
 
           {/* Member Name */}
-          <h3 className="font-display font-bold text-[15px] sm:text-[16px] text-white leading-snug line-clamp-1">
+          <h3 className="font-display font-bold text-[13.5px] sm:text-[15px] md:text-[16px] text-white leading-snug line-clamp-1">
             {member.name}
           </h3>
         </div>
 
         {/* Footer Technical Metadata */}
-        <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-[#546e7a]">
+        <div className="mt-2.5 sm:mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[8.5px] sm:text-[9px] font-mono text-[#546e7a]">
           <span>branch: main</span>
           <span className="text-[#00ff88]">200 OK</span>
         </div>
@@ -957,9 +958,9 @@ const CleanDomainSection = ({ domain, index, sectionId }) => {
     .replace(/[^a-zA-Z0-9]/g, '');
 
   return (
-    <div id={sectionId} className="w-full flex flex-col mb-16 md:mb-24 scroll-mt-28">
+    <div id={sectionId} className="w-full flex flex-col mb-14 sm:mb-16 md:mb-24 scroll-mt-28">
       {/* Domain Code Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3 mb-6 font-mono">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3 mb-5 sm:mb-6 font-mono">
         <div className="flex items-center gap-2.5 flex-wrap">
           <span className="text-[#FF5A4F] text-xs font-bold">namespace</span>
           <h2 className="font-display font-bold text-xl sm:text-2xl text-white tracking-wide">
@@ -975,7 +976,7 @@ const CleanDomainSection = ({ domain, index, sectionId }) => {
       </div>
 
       {/* Grid of members - normally visible, no squishing, no zooming */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
         {sortedMembers.map((member, idx) => (
           <CleanMemberCard
             key={idx}
@@ -1014,7 +1015,7 @@ const TeamPage = () => {
           const rect = el.getBoundingClientRect();
           const targetY = windowHeight * 0.35;
           const dist = Math.abs(rect.top - targetY);
-          if (rect.top <= windowHeight * 0.7 && dist < minDistance) {
+          if (rect.top <= windowHeight * 0.75 && dist < minDistance) {
             minDistance = dist;
             currentIndex = idx;
           }
@@ -1042,7 +1043,7 @@ const TeamPage = () => {
 
   const filterOptions = [
     { label: 'ALL', domainMatch: 'ALL' },
-    { label: 'MANAGEMENT', domainMatch: 'Management' },
+    { label: 'LEADERSHIP', domainMatch: 'Management' },
     { label: 'ADVISORY', domainMatch: 'Advisory' },
     { label: 'PYTHON', domainMatch: 'Python' },
     { label: 'JAVA', domainMatch: 'Java' },
@@ -1079,14 +1080,15 @@ const TeamPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/60 via-transparent to-[#04060C]" />
       </div>
 
-      {/* Rotary Wheel Scrollbar on Right Edge */}
+      {/* Rotary Wheel Scrollbar on Right Edge - text inside wheel */}
       <RotaryWheelScrollbar
         activeIndex={activeRotaryIndex}
         onSelect={handleSelectRotaryDomain}
       />
 
-      <div className="relative z-10 w-full flex-1 pt-28 md:pt-32">
-        <SharedContainer>
+      <div className="relative z-10 w-full flex-1 pt-24 sm:pt-28 md:pt-32">
+        {/* lg:pr-52 xl:pr-56 gives generous clearance so teammate cards never touch the rotary wheel */}
+        <SharedContainer className="w-full lg:pr-48 xl:pr-56">
           {/* Back to Home Link */}
           <div className="mb-6 md:mb-8">
             <Link
@@ -1103,13 +1105,13 @@ const TeamPage = () => {
           </div>
 
           {/* Terminal Telemetry Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-8 border-b border-white/10 gap-2 text-xs text-[#546e7a] font-mono">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-6 sm:mb-8 border-b border-white/10 gap-2 text-[10px] sm:text-xs text-[#546e7a] font-mono">
             <div className="flex items-center gap-2">
               <span className="text-[#00ff88]">&gt;_</span>
               <span className="text-[#8b949e]">root@coho:~/crew$</span>
               <span className="text-[#00aaff]">cat ./team.json | jq .roster</span>
             </div>
-            <div className="flex items-center gap-3 text-[11px]">
+            <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] flex-wrap">
               <span>NODES: 40+</span>
               <span className="text-white/15">//</span>
               <span>CLUSTER: SMEC_CAMPUS</span>
@@ -1119,28 +1121,28 @@ const TeamPage = () => {
           </div>
 
           {/* Page Hero Header */}
-          <div className="mb-10">
+          <div className="mb-8 sm:mb-10">
             <p className="text-xs text-[#00d4cc] font-mono mb-2">// directory: ./team</p>
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
+            <h1 className="font-display font-extrabold text-3xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
               THE <span className="text-[#FF5A4F]">CREW</span>{' '}
-              <span className="text-white/25 font-mono text-xl sm:text-3xl ml-2 font-normal lowercase">
+              <span className="text-white/25 font-mono text-lg sm:text-2xl md:text-3xl ml-2 font-normal lowercase block sm:inline mt-1 sm:mt-0">
                 {"{ 40+ nodes }"}
               </span>
             </h1>
-            <p className="text-[#8A90A0] text-sm md:text-base max-w-2xl font-light leading-relaxed font-sans">
+            <p className="text-[#8A90A0] text-xs sm:text-sm md:text-base max-w-2xl font-light leading-relaxed font-sans">
               The brilliant minds, makers, and architects behind Code Hoppers. 40 passionate engineers and organizers building the technical community at SMEC.
             </p>
           </div>
 
-          {/* Interactive Domain Filter Tabs */}
-          <div className="flex gap-2 flex-wrap mb-12 pb-4 border-b border-white/10">
+          {/* Interactive Domain Filter Tabs - horizontal scroll on mobile */}
+          <div className="flex gap-2 mb-10 sm:mb-12 pb-3 border-b border-white/10 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap hide-scrollbar">
             {filterOptions.map((filter) => {
               const isActive = selectedFilter === filter.domainMatch;
               return (
                 <button
                   key={filter.domainMatch}
                   onClick={() => setSelectedFilter(filter.domainMatch)}
-                  className={`text-xs px-3.5 py-1.5 rounded-none font-mono uppercase tracking-wider transition-all border ${
+                  className={`text-[11px] sm:text-xs px-3 sm:px-3.5 py-1.5 rounded-none font-mono uppercase tracking-wider transition-all border whitespace-nowrap shrink-0 ${
                     isActive
                       ? 'bg-[#FF5A4F] text-[#04060C] font-bold border-[#FF5A4F]'
                       : 'bg-[#070913] text-[#8b949e] border-white/10 hover:border-white/40 hover:text-white'

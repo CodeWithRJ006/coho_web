@@ -101,11 +101,11 @@ const Navbar = () => {
         duration: shouldReduceMotion ? 0 : 0.35,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className={`fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-3rem)] max-w-[1440px] ${
+      className={`fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-1.25rem)] sm:w-[calc(100%-3rem)] max-w-[1440px] ${
         isVisible || mobileOpen ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
-      <nav className="w-full h-[72px] bg-white/[0.03] backdrop-blur-md border border-[rgba(80,130,255,0.28)] rounded-xl px-6 md:px-8 flex items-center justify-between shadow-[0_0_20px_rgba(61,155,255,0.15)] relative">
+      <nav className="w-full h-[62px] sm:h-[72px] bg-white/[0.03] backdrop-blur-md border border-[rgba(80,130,255,0.28)] rounded-xl px-4 sm:px-6 md:px-8 flex items-center justify-between shadow-[0_0_20px_rgba(61,155,255,0.15)] relative">
         {/* Left: Logo without any box/background/border */}
         <div className="flex items-center shrink-0">
           <Logo size="nav" />
@@ -177,7 +177,7 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
-              className="md:hidden absolute top-[80px] left-0 right-0 bg-[#04060C]/95 backdrop-blur-xl border border-[rgba(80,130,255,0.28)] rounded-xl p-6 flex flex-col gap-5 shadow-[0_10px_30px_rgba(0,0,0,0.8)] overflow-hidden z-50 pointer-events-auto"
+              className="md:hidden absolute top-[70px] sm:top-[80px] left-0 right-0 bg-[#04060C]/98 backdrop-blur-xl border border-[rgba(80,130,255,0.28)] rounded-xl p-6 flex flex-col gap-5 shadow-[0_10px_30px_rgba(0,0,0,0.8)] overflow-hidden z-50 pointer-events-auto"
             >
               <Link
                 to="/team"

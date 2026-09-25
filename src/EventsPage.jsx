@@ -128,7 +128,7 @@ export const EventsPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/40 via-transparent to-[#04060C]" />
       </div>
 
-      <div className="relative z-10 w-full flex-1 pt-28 md:pt-32 pb-16 md:pb-20">
+      <div className="relative z-10 w-full flex-1 pt-24 sm:pt-28 md:pt-32 pb-16 md:pb-20">
         <SharedContainer>
           {/* Back to Home Link */}
           <div className="mb-6 md:mb-8">
@@ -156,7 +156,7 @@ export const EventsPage = () => {
               COHO <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">EVENTS</span>
             </h1>
             <p className="text-[#8A90A0] max-w-2xl mx-auto tracking-wide font-light text-sm md:text-base">
-              From workshops to hackathons — here's what we've been up to.
+              From workshops to hackathons, here's what we've been up to.
             </p>
           </motion.div>
 
