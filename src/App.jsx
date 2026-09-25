@@ -590,7 +590,171 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// ── Role Priority Helper for Ordering ──────────────────────────────────────────
+const getRolePriority = (role = '') => {
+  const r = role.toLowerCase();
+  if (r.includes('president') && !r.includes('vice')) return 1;
+  if (r.includes('vice president')) return 2;
+  if (r.includes('general secretary')) return 3;
+  if (r.includes('treasurer')) return 4;
+  if (r.includes('lead advisor')) return 5;
+  if (r.includes('advisor')) return 6;
+  if (r.includes('lead') && !r.includes('co-lead')) return 7;
+  if (r.includes('co-lead')) return 8;
+  return 10;
+};
+
+// ── Codified Member Accordion Card ───────────────────────────────────────────
+const CodifiedMemberCard = ({ member, isActive, onSelect, index, domain }) => {
+  const nodeHex = `0x0${index + 1}`;
+  const isLead =
+    member.role?.toLowerCase().includes('lead') ||
+    member.role?.toLowerCase().includes('president') ||
+    member.role?.toLowerCase().includes('secretary');
+
+  return (
+    <div
+      onMouseEnter={onSelect}
+      onClick={onSelect}
+      tabIndex={0}
+      onFocus={onSelect}
+      className={`snap-start shrink-0 h-[400px] sm:h-[460px] md:h-[480px] rounded-none overflow-hidden relative cursor-pointer border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] select-none flex flex-col justify-between ${
+        isActive
+          ? 'w-[280px] sm:w-[320px] md:flex-[3.2] md:min-w-[280px] border-[#3D9BFF] shadow-[0_0_30px_rgba(61,155,255,0.2)] bg-[#070913]'
+          : 'w-[72px] sm:w-[86px] md:flex-1 md:min-w-0 border-white/10 hover:border-white/25 opacity-70 hover:opacity-90 bg-[#05060b]'
+      }`}
+    >
+      {/* Top Terminal Status Header */}
+      <div className="relative z-20 flex items-center justify-between px-3 py-2 bg-[#04060C]/90 border-b border-white/10 text-[10px] font-mono">
+        <span className={isActive ? 'text-[#3D9BFF] font-semibold' : 'text-[#546e7a]'}>
+          NODE:{nodeHex}
+        </span>
+        <div className="flex items-center gap-1.5">
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              isActive ? 'bg-[#00ff88] animate-pulse' : 'bg-[#546e7a]'
+            }`}
+          />
+          <span className="hidden sm:inline text-[#546e7a]">
+            {isActive ? 'ACTIVE' : 'STANDBY'}
+          </span>
+        </div>
+      </div>
+
+      {/* Member Photo Background */}
+      <div className="absolute inset-0 bg-[#07080e] overflow-hidden">
+        <img
+          src={encodeURI(member.image)}
+          alt={member.name}
+          className={`w-full h-full object-cover object-top transition-all duration-700 ${
+            isActive ? 'grayscale-0 scale-105 opacity-100' : 'grayscale opacity-35 scale-100'
+          }`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/assets/team_placeholder.jpeg';
+          }}
+        />
+        {/* Scrim Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#04060C] via-[#04060C]/50 to-transparent" />
+      </div>
+
+      {/* Active Content Panel */}
+      <div
+        className={`relative z-20 p-5 transition-all duration-300 font-mono ${
+          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+      >
+        {/* Role token tag */}
+        <div className="flex items-center gap-2 mb-2">
+          <span
+            className={`text-[10px] px-2 py-0.5 border font-semibold tracking-wider uppercase ${
+              isLead
+                ? 'bg-[#FF5A4F]/15 text-[#FF5A4F] border-[#FF5A4F]/50'
+                : 'bg-[#3D9BFF]/15 text-[#3D9BFF] border-[#3D9BFF]/50'
+            }`}
+          >
+            &lt;{member.role || 'Member'} /&gt;
+          </span>
+          <span className="text-[10px] text-[#546e7a]">ping: 14ms</span>
+        </div>
+
+        {/* Member Name */}
+        <h3 className="font-display text-lg sm:text-xl font-bold whitespace-nowrap text-white">
+          {member.name}
+        </h3>
+
+        {/* Technical Sub-metadata */}
+        <div className="mt-2 pt-2 border-t border-white/10 flex justify-between items-center text-[10px] text-[#8b949e]">
+          <span>branch: main</span>
+          <span className="text-[#00ff88]">status: 200 OK</span>
+        </div>
+      </div>
+
+      {/* Vertical Text for Inactive State */}
+      {!isActive && (
+        <div className="relative z-20 flex-1 flex items-end justify-center pb-8 pointer-events-none">
+          <p
+            className="text-xs font-mono text-[#8A90A0] tracking-widest whitespace-nowrap font-medium"
+            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+          >
+            [{nodeHex}] {member.name}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── Accordion Row per Domain ──────────────────────────────────────────────────
+const AccordionRow = ({ domain }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const sortedMembers = [...domain.members].sort(
+    (a, b) => getRolePriority(a.role) - getRolePriority(b.role)
+  );
+
+  const namespaceName = domain.domain
+    .replace(/[()]/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '');
+
+  return (
+    <div className="w-full flex flex-col mb-16 md:mb-20">
+      {/* Domain Code Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3 mb-6 font-mono">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <span className="text-[#FF5A4F] text-xs font-bold">namespace</span>
+          <h2 className="font-display font-bold text-xl sm:text-2xl text-white tracking-wide">
+            CoHo.{namespaceName}
+          </h2>
+          <span className="text-[#546e7a] text-xs font-mono">{"{ /* cluster */ }"}</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-[#546e7a] font-mono">
+          <span>{sortedMembers.length} active nodes</span>
+          <span className="text-white/15">//</span>
+          <span className="text-[#00ff88]">CLUSTER_ONLINE</span>
+        </div>
+      </div>
+
+      {/* Accordion Row Container */}
+      <div className="w-full flex gap-2.5 sm:gap-3.5 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory event-scrollbar justify-start">
+        {sortedMembers.map((member, idx) => (
+          <CodifiedMemberCard
+            key={idx}
+            member={member}
+            isActive={idx === activeIndex}
+            onSelect={() => setActiveIndex(idx)}
+            index={idx}
+            domain={domain.domain}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ── Team Page Component ──────────────────────────────────────────────────────
 const TeamPage = () => {
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -600,9 +764,30 @@ const TeamPage = () => {
     }
   }, []);
 
+  const filterOptions = [
+    { label: 'ALL', domainMatch: 'ALL' },
+    { label: 'MANAGEMENT', domainMatch: 'Management' },
+    { label: 'ADVISORY', domainMatch: 'Advisory' },
+    { label: 'PYTHON', domainMatch: 'Python' },
+    { label: 'JAVA', domainMatch: 'Java' },
+    { label: 'C++', domainMatch: 'C++' },
+    { label: 'WEB DEV', domainMatch: 'Web' },
+    { label: 'MARKETING', domainMatch: 'Marketing' },
+    { label: 'DESIGN', domainMatch: 'Design' },
+    { label: 'MEDIA', domainMatch: 'Media' },
+    { label: 'LOGISTICS', domainMatch: 'Logistics' },
+  ];
+
+  const filteredDomains =
+    selectedFilter === 'ALL'
+      ? TEAM_DOMAINS
+      : TEAM_DOMAINS.filter((d) =>
+          d.domain.toLowerCase().includes(selectedFilter.toLowerCase())
+        );
+
   return (
     <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full overflow-hidden">
-      {/* Background Video */}
+      {/* Background Video + Matrix Rain Overlay */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-black overflow-hidden opacity-35">
         <video
           ref={videoRef}
@@ -614,7 +799,8 @@ const TeamPage = () => {
         >
           <source src="/download.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/40 via-transparent to-[#04060C]" />
+        <BackgroundCodeRain opacity={0.35} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/60 via-transparent to-[#04060C]" />
       </div>
 
       <div className="relative z-10 w-full flex-1 pt-28 md:pt-32">
@@ -623,31 +809,71 @@ const TeamPage = () => {
           <div className="mb-6 md:mb-8">
             <Link
               to="/"
-              className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-medium group"
+              className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-mono group"
             >
-              <div className="w-8 h-8 rounded-full border border-[#8A8F98]/30 flex items-center justify-center group-hover:border-white/60 group-hover:-translate-x-1 transition-all duration-300">
+              <div className="w-8 h-8 rounded-none border border-white/20 flex items-center justify-center group-hover:border-[#FF5A4F] group-hover:-translate-x-1 transition-all duration-300">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
               </div>
-              BACK TO HOME
+              &lt; BACK TO HOME
             </Link>
           </div>
 
-          {/* Page Header */}
-          <div className="mb-12 md:mb-16">
+          {/* Terminal Telemetry Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-8 border-b border-white/10 gap-2 text-xs text-[#546e7a] font-mono">
+            <div className="flex items-center gap-2">
+              <span className="text-[#00ff88]">&gt;_</span>
+              <span className="text-[#8b949e]">root@coho:~/crew$</span>
+              <span className="text-[#00aaff]">cat ./team.json | jq .roster</span>
+            </div>
+            <div className="flex items-center gap-3 text-[11px]">
+              <span>NODES: 40+</span>
+              <span className="text-white/15">//</span>
+              <span>CLUSTER: SMEC_CAMPUS</span>
+              <span className="text-white/15">//</span>
+              <span className="text-[#00ff88]">BRANCH: main</span>
+            </div>
+          </div>
+
+          {/* Page Hero Header */}
+          <div className="mb-10">
+            <p className="text-xs text-[#00d4cc] font-mono mb-2">// directory: ./team</p>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-white mb-3 md:mb-4">
-              THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">CREW</span>
+              THE <span className="text-[#FF5A4F]">CREW</span>{' '}
+              <span className="text-white/25 font-mono text-xl sm:text-3xl ml-2 font-normal lowercase">
+                {"{ 40+ nodes }"}
+              </span>
             </h1>
-            <p className="text-[#8A90A0] text-sm md:text-base max-w-xl tracking-wide font-light">
-              The brilliant minds behind Code Hoppers, driving innovation, technology, and community.
+            <p className="text-[#8A90A0] text-sm md:text-base max-w-2xl font-light leading-relaxed font-sans">
+              The brilliant minds, makers, and architects behind Code Hoppers. 40 passionate engineers and organizers building the technical community at SMEC.
             </p>
           </div>
 
+          {/* Interactive Domain Filter Tabs */}
+          <div className="flex gap-2 flex-wrap mb-12 pb-4 border-b border-white/10">
+            {filterOptions.map((filter) => {
+              const isActive = selectedFilter === filter.domainMatch;
+              return (
+                <button
+                  key={filter.domainMatch}
+                  onClick={() => setSelectedFilter(filter.domainMatch)}
+                  className={`text-xs px-3.5 py-1.5 rounded-none font-mono uppercase tracking-wider transition-all border ${
+                    isActive
+                      ? 'bg-[#FF5A4F] text-[#04060C] font-bold border-[#FF5A4F]'
+                      : 'bg-[#070913] text-[#8b949e] border-white/10 hover:border-white/40 hover:text-white'
+                  }`}
+                >
+                  [ {filter.label} ]
+                </button>
+              );
+            })}
+          </div>
+
           {/* Accordion Rows per Domain */}
-          <div className="flex flex-col gap-4 pb-16">
-            {TEAM_DOMAINS.map((domain, idx) => (
-              <AccordionRow key={idx} domain={domain} />
+          <div className="flex flex-col pb-16">
+            {filteredDomains.map((domain, idx) => (
+              <AccordionRow key={domain.domain || idx} domain={domain} />
             ))}
           </div>
         </SharedContainer>
@@ -657,6 +883,7 @@ const TeamPage = () => {
     </div>
   );
 };
+
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -691,6 +918,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/team" element={<TeamPage />} />
+                <Route path="/teams" element={<TeamPage />} />
                 <Route path="/events" element={<EventsPage />} />
               </Routes>
             </ErrorBoundary>
