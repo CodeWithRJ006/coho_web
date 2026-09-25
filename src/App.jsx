@@ -9,6 +9,7 @@ import { EventsPage } from './EventsPage';
 
 import SharedContainer from './components/SharedContainer';
 import Footer from './components/Footer';
+import Navbar from './components/Navbar';
 
 const AnimatedText = ({ text, className = "" }) => {
   return (
@@ -34,43 +35,6 @@ const Astronaut = () => (
     </motion.div>
 );
 
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled ? 'w-[calc(100%-3rem)] md:w-[800px]' : 'w-[calc(100%-3rem)] max-w-[1440px]'}`}>
-      <nav className="w-full bg-[#04060C]/90 backdrop-blur-md border border-white/5 rounded-full px-8 md:px-10 py-4 md:py-5 flex items-center justify-between shadow-2xl">
-        <Logo size="nav" />
-
-        <div className="hidden md:flex items-center gap-10 text-[10px] tracking-[0.25em] font-medium uppercase text-[#8A8F98]">
-            <a href="/#about" className="relative group card-hover hover:text-white transition-colors">
-              <span>About</span>
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-[#3D9BFF] shadow-[0_0_8px_#3D9BFF] group-hover:w-8 transition-all duration-300" />
-            </a>
-            <Link to="/team" className="relative group card-hover hover:text-white transition-colors">
-              <span>Our Team</span>
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-[#3D9BFF] shadow-[0_0_8px_#3D9BFF] group-hover:w-8 transition-all duration-300" />
-            </Link>
-            <Link to="/events" className="relative group card-hover hover:text-white transition-colors">
-              <span>Events</span>
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-[#3D9BFF] shadow-[0_0_8px_#3D9BFF] group-hover:w-8 transition-all duration-300" />
-            </Link>
-            <button className="w-[40px] h-[40px] rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300 card-hover ml-6">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </nav>
-    </div>
-  );
-};
 
 const SciFiCard = ({ delay, title, desc, icon, accent }) => {
   const ref = useRef(null);
@@ -271,7 +235,7 @@ const Home = () => {
         </SharedContainer>
       </section>
 
-      <section id="about" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden">
+      <section id="about" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative w-full mb-16">
           <div className="w-full md:w-[60%] z-20">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] mb-6 whitespace-nowrap">
@@ -310,7 +274,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      <section id="team" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden">
+      <section id="team" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <div className="flex justify-between items-center w-full mb-8">
           <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
             <span className="text-[#3D9BFF] font-medium">03</span>
@@ -350,7 +314,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      <section id="events" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden">
+      <section id="events" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <div className="flex justify-between items-center w-full mb-12">
           <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
             <span className="text-[#3D9BFF] font-medium">04</span>
