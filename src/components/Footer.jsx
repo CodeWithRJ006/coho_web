@@ -4,19 +4,19 @@ import Logo from './Logo';
 import SharedContainer from './SharedContainer';
 
 const Footer = () => (
-  <footer className="relative w-full z-10 pt-[56px] pb-8 bg-gradient-to-b from-transparent via-[#04060C]/80 to-[#04060C]">
+  <footer className="relative w-full z-10 pt-12 sm:pt-14 pb-8 bg-gradient-to-b from-transparent via-[#04060C]/80 to-[#04060C]">
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] h-[1px] bg-gradient-to-r from-transparent via-[#FF5A4F]/70 to-[#3D9BFF]/70" />
 
     <SharedContainer className="w-full relative z-20">
-      <div className="flex flex-col md:flex-row justify-between w-full gap-12 md:gap-0">
+      <div className="flex flex-col md:flex-row justify-between w-full gap-10 md:gap-0">
 
-        {/* Left Side */}
+        {/* Left Side: Logo & Info */}
         <div className="flex flex-col">
           <Logo size="footer" />
-          <div className="mt-5 font-sans font-light text-[14px] leading-[22px] text-[#B8BDC9]">
+          <div className="mt-4 sm:mt-5 font-sans font-light text-[13.5px] sm:text-[14px] leading-[22px] text-[#B8BDC9]">
             Step in as a learner.<br />Step out as a leader.
           </div>
-          <div className="mt-6 flex flex-col">
+          <div className="mt-5 sm:mt-6 flex flex-col">
             <div className="w-[16px] h-[2px] bg-[#FF5A4F] mb-[10px]" />
             <div className="font-sans font-medium text-[9.5px] tracking-[0.25em] text-[#8A90A0] leading-[15px] uppercase">
               St. Martin's<br />Engineering College
@@ -25,14 +25,14 @@ const Footer = () => (
         </div>
 
         {/* Right Side: NAVIGATE & CONNECT */}
-        <div className="flex gap-16 md:gap-24">
+        <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 md:gap-24">
 
           {/* NAVIGATE Column */}
           <div className="flex flex-col">
-            <h4 className="text-[10px] tracking-[0.3em] font-medium text-[#3D9BFF] uppercase mb-4">
+            <h4 className="text-[10px] tracking-[0.3em] font-medium text-[#3D9BFF] uppercase mb-3.5 sm:mb-4">
               NAVIGATE
             </h4>
-            <nav className="flex flex-col gap-3.5 text-[14px] font-light text-[#D5DAE6]">
+            <nav className="flex flex-col gap-3 text-[13.5px] sm:text-[14px] font-light text-[#D5DAE6]">
               <Link
                 to="/"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -54,10 +54,10 @@ const Footer = () => (
 
           {/* CONNECT Column */}
           <div className="flex flex-col">
-            <h4 className="text-[10px] tracking-[0.3em] font-medium text-[#3D9BFF] uppercase mb-4">
+            <h4 className="text-[10px] tracking-[0.3em] font-medium text-[#3D9BFF] uppercase mb-3.5 sm:mb-4">
               CONNECT
             </h4>
-            <div className="flex flex-col gap-3.5 text-[14px] font-light text-[#D5DAE6]">
+            <div className="flex flex-col gap-3 text-[13.5px] sm:text-[14px] font-light text-[#D5DAE6]">
               {/* Instagram */}
               <a
                 href="https://www.instagram.com/coho.smec/"
@@ -96,7 +96,7 @@ const Footer = () => (
                   <rect x="3" y="5" width="18" height="14" rx="2.5" />
                   <path d="M3.5 7l8.5 6 8.5-6" />
                 </svg>
-                <span>codehopperssmec@gmail.com</span>
+                <span className="break-all">codehopperssmec@gmail.com</span>
               </a>
 
               {/* College website */}
@@ -120,8 +120,8 @@ const Footer = () => (
       </div>
 
       {/* Bottom Bar */}
-      <div className="w-full h-[1px] bg-white/10 mb-6 mt-12" />
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-[11px] tracking-[0.06em] text-[#8A90A0]">
+      <div className="w-full h-[1px] bg-white/10 mb-6 mt-10 sm:mt-12" />
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 text-[11px] tracking-[0.06em] text-[#8A90A0]">
         <span>© 2026 CoHo, SMEC. All rights reserved.</span>
         <span className="text-[10px] tracking-[0.25em] uppercase">CODE HOPPERS · TECHNICAL CLUB</span>
       </div>
