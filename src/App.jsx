@@ -12,102 +12,70 @@ import SharedContainer from './components/SharedContainer';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 
-// ── Typing Terminal Component ──────────────────────────────────────────────────
-const TERMINAL_LINES = [
-  { prompt: 'coho@smec:~$', cmd: 'whoami', output: 'Code Hoppers Technical Club', outColor: '#C9CED8' },
-  { prompt: 'coho@smec:~$', cmd: 'cat /etc/coho/mission.txt', output: 'Build. Learn. Conquer.', outColor: '#FF5A4F' },
-  { prompt: 'coho@smec:~$', cmd: 'ls domains/', output: 'web/  ai/  cloud/  dsa/  design/', outColor: '#3D9BFF' },
-  { prompt: 'coho@smec:~$', cmd: 'wc -l crew.db', output: '40 active developers', outColor: '#C9CED8' },
-  { prompt: 'coho@smec:~$', cmd: 'uptime --events', output: '20+ events shipped', outColor: '#3D9BFF' },
-  { prompt: 'coho@smec:~$', cmd: 'git log --oneline -1', output: 'latest: CoHo v2.0 -- all systems go', outColor: '#00d4cc' },
-];
-
-const TerminalWidget = () => {
-  const [visibleLines, setVisibleLines] = useState([]);
-  const [typedCmd, setTypedCmd] = useState('');
-  const [phase, setPhase] = useState('typing'); // 'typing' | 'output' | 'next'
-  const [lineIndex, setLineIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
+// Background matrix rain that overlays the space video
+function BackgroundCodeRain({ opacity = 0.22 }) {
+  const canvasRef = useRef(null);
 
   useEffect(() => {
-    if (lineIndex >= TERMINAL_LINES.length) {
-      // Restart after pause
-      const t = setTimeout(() => {
-        setVisibleLines([]);
-        setTypedCmd('');
-        setLineIndex(0);
-        setCharIndex(0);
-        setPhase('typing');
-      }, 3000);
-      return () => clearTimeout(t);
-    }
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    const line = TERMINAL_LINES[lineIndex];
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
 
-    if (phase === 'typing') {
-      if (charIndex < line.cmd.length) {
-        const t = setTimeout(() => {
-          setTypedCmd(line.cmd.slice(0, charIndex + 1));
-          setCharIndex(c => c + 1);
-        }, 45);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setPhase('output'), 160);
-        return () => clearTimeout(t);
+    const fontSize = 13;
+    const cols = Math.floor(canvas.width / fontSize);
+    const drops = Array.from({ length: cols }, () =>
+      Math.floor(Math.random() * (canvas.height / fontSize))
+    );
+    const chars = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>{}[];:=+*#$_!?/\\";
+    const palette = ['#00ff88', '#00aaff', '#FF5A4F', '#3D9BFF', '#c8e0ff'];
+
+    let animId, lastTime = 0;
+    const draw = (currentTime) => {
+      animId = requestAnimationFrame(draw);
+      if (currentTime - lastTime < 32) return;
+      lastTime = currentTime;
+
+      ctx.fillStyle = 'rgba(4, 6, 12, 0.16)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${fontSize}px 'JetBrains Mono', 'Courier New', monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        const isHead = Math.random() > 0.92;
+        ctx.fillStyle = isHead ? '#ffffff' : palette[i % palette.length];
+        ctx.fillText(char, x, y);
+        if (y > canvas.height && Math.random() > 0.87) drops[i] = 0;
+        drops[i]++;
       }
-    }
+    };
 
-    if (phase === 'output') {
-      setVisibleLines(prev => [
-        ...prev,
-        { prompt: line.prompt, cmd: line.cmd, output: line.output, outColor: line.outColor },
-      ]);
-      setTypedCmd('');
-      setCharIndex(0);
-      const t = setTimeout(() => {
-        setLineIndex(i => i + 1);
-        setPhase('typing');
-      }, 600);
-      return () => clearTimeout(t);
-    }
-  }, [phase, charIndex, lineIndex]);
-
-  const currentLine = TERMINAL_LINES[lineIndex];
+    animId = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
 
   return (
-    <div className="w-full font-mono text-[11px] sm:text-[12px] bg-[#040810] border border-white/10 p-4 sm:p-5 select-none">
-      {/* Title bar */}
-      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/5">
-        <span className="w-2.5 h-2.5 bg-[#FF5A4F]" />
-        <span className="w-2.5 h-2.5 bg-[#ffcc00]" />
-        <span className="w-2.5 h-2.5 bg-[#00d4cc]" />
-        <span className="ml-2 text-[#546e7a] text-[10px] tracking-wider">coho_terminal -- bash</span>
-      </div>
-
-      {/* Completed lines */}
-      <div className="space-y-2 min-h-[140px]">
-        {visibleLines.slice(-5).map((l, i) => (
-          <div key={i}>
-            <div className="flex items-center gap-2">
-              <span className="text-[#00d4cc] shrink-0">{l.prompt}</span>
-              <span className="text-white">{l.cmd}</span>
-            </div>
-            <div className="pl-0 text-[10px] sm:text-[11px]" style={{ color: l.outColor }}>{l.output}</div>
-          </div>
-        ))}
-
-        {/* Active typing line */}
-        {lineIndex < TERMINAL_LINES.length && (
-          <div className="flex items-center gap-2">
-            <span className="text-[#00d4cc] shrink-0">{currentLine.prompt}</span>
-            <span className="text-white">{typedCmd}</span>
-            <span className="w-[1px] h-[13px] bg-[#FF5A4F] animate-pulse" />
-          </div>
-        )}
-      </div>
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{ opacity, position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+    />
   );
-};
+}
+
+
+// ── Typing Terminal Component ──────────────────────────────────────────────────
 
 // ── Domain stat row ────────────────────────────────────────────────────────────
 const STATS = [
@@ -285,7 +253,7 @@ const Home = () => {
           <div className="flex-1 flex items-center w-full">
 
             {/* Left: Text block */}
-            <div className="w-full max-w-[600px] pb-8 relative z-30">
+            <div className="w-full max-w-[680px] pb-8 relative z-30">
 
               {/* Terminal prompt eyebrow */}
               <motion.div
@@ -299,24 +267,58 @@ const Home = () => {
                 <span className="text-[#546e7a]">./run platform</span>
               </motion.div>
 
-              {/* Headline */}
-              <h1 className="font-display font-extrabold text-[clamp(46px,8.5vw,130px)] leading-[0.9] tracking-[-0.02em] mb-5 md:mb-6 flex flex-col">
-                <motion.span
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-white"
+              {/* Headline - SVG stroke write-in animation */}
+              <h1 className="mb-5 md:mb-6 leading-none" aria-label="Code Hoppers">
+                <svg
+                  viewBox="0 0 700 230"
+                  className="w-full max-w-[min(700px,90vw)]"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
                 >
-                  CODE
-                </motion.span>
-                <motion.span
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[#FF5A4F]"
-                >
-                  HOPPERS
-                </motion.span>
+                  {/* CODE - white stroke write-in then fill */}
+                  <motion.text
+                    x="4"
+                    y="115"
+                    fontSize="130"
+                    fontFamily="Outfit, Inter, sans-serif"
+                    fontWeight="800"
+                    letterSpacing="-4"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    fill="white"
+                    strokeDasharray="3500 3500"
+                    initial={{ strokeDashoffset: 3500, fillOpacity: 0 }}
+                    animate={{ strokeDashoffset: 0, fillOpacity: 1 }}
+                    transition={{
+                      strokeDashoffset: { duration: 1.1, ease: 'easeInOut', delay: 0.1 },
+                      fillOpacity: { duration: 0.5, delay: 0.9 },
+                    }}
+                  >
+                    CODE
+                  </motion.text>
+                  {/* HOPPERS - coral stroke write-in then fill */}
+                  <motion.text
+                    x="4"
+                    y="228"
+                    fontSize="130"
+                    fontFamily="Outfit, Inter, sans-serif"
+                    fontWeight="800"
+                    letterSpacing="-4"
+                    stroke="#FF5A4F"
+                    strokeWidth="1.5"
+                    fill="#FF5A4F"
+                    strokeDasharray="4500 4500"
+                    initial={{ strokeDashoffset: 4500, fillOpacity: 0 }}
+                    animate={{ strokeDashoffset: 0, fillOpacity: 1 }}
+                    transition={{
+                      strokeDashoffset: { duration: 1.3, ease: 'easeInOut', delay: 0.45 },
+                      fillOpacity: { duration: 0.5, delay: 1.55 },
+                    }}
+                  >
+                    HOPPERS
+                  </motion.text>
+                </svg>
               </h1>
 
               {/* Tagline */}
@@ -372,16 +374,6 @@ const Home = () => {
                 </SharpButton>
               </motion.div>
             </div>
-
-            {/* Right: Terminal Widget */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="hidden lg:block flex-1 max-w-[400px] xl:max-w-[460px] ml-auto"
-            >
-              <TerminalWidget />
-            </motion.div>
 
           </div>
 
@@ -650,8 +642,10 @@ export default function App() {
         <video autoPlay loop muted playsInline className="w-full h-full object-cover object-center opacity-70 md:opacity-90 scale-110">
           <source src="/download.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/20 via-transparent to-[#04060C]/80" />
-        <div className="absolute -bottom-10 -right-10 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_bottom_right,var(--tw-gradient-stops))] from-[#04060C] via-[#04060C] to-transparent blur-3xl pointer-events-none" />
+        {/* Matrix rain overlay above video, below content */}
+        <BackgroundCodeRain opacity={0.22} />
+        {/* Dark bottom fade so content stays readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/10 via-transparent to-[#04060C]/75" style={{ pointerEvents: 'none' }} />
       </div>
 
       <div className="relative z-10 w-full flex-1">
