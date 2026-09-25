@@ -178,7 +178,7 @@ const Home = () => {
 
   return (
     <div className="w-full">
-      <section className="relative w-full h-screen min-h-[750px] flex flex-col z-10 pt-28 md:pt-32">
+      <section className="relative w-full h-screen min-h-[720px] md:min-h-[750px] flex flex-col z-10 pt-24 md:pt-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060C]/90 via-[#04060C]/40 to-transparent w-[95%] md:w-[65%] z-10 pointer-events-none" />
 
 
@@ -186,14 +186,14 @@ const Home = () => {
           <div className="flex-1 flex flex-col justify-center w-full relative">
             <div className="w-full max-w-[650px] pb-8 relative z-30">
               {/* Eyebrow */}
-              <div className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.3em] uppercase text-white/90 mb-4">
+              <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-white/90 mb-4 flex-wrap sm:flex-nowrap">
                 <span>CODEHOPPERS</span>
-                <div className="w-[62px] h-[1px] bg-white/70" />
+                <div className="w-[40px] sm:w-[62px] h-[1px] bg-white/70" />
                 <span>TECHNICAL CLUB</span>
               </div>
 
               {/* Headline */}
-              <h1 className="font-display font-extrabold text-[clamp(56px,8.3vw,132px)] leading-[0.93] tracking-[-0.01em] mb-6 flex flex-col whitespace-nowrap drop-shadow-2xl">
+              <h1 className="font-display font-extrabold text-[clamp(42px,8vw,132px)] leading-[0.93] tracking-[-0.01em] mb-5 md:mb-6 flex flex-col drop-shadow-2xl">
                 <AnimatedText
                   text="CODE"
                   className="pb-1 md:pb-2"
@@ -210,7 +210,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-light text-[16px] tracking-[0.11em] text-white mb-5 md:mb-6"
+                className="font-light text-[14px] sm:text-[16px] tracking-[0.08em] sm:tracking-[0.11em] text-white mb-5 md:mb-6"
               >
                 Step in as a learner. Step out as a leader.
               </motion.p>
@@ -220,11 +220,14 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="font-light text-[14px] leading-[1.35] text-[#C9CED8] max-w-[480px] mb-8 md:mb-10 md:whitespace-nowrap"
+                className="font-light text-[13px] sm:text-[14px] leading-[1.4] sm:leading-[1.35] text-[#C9CED8] max-w-[480px] mb-8 md:mb-10 md:whitespace-nowrap"
               >
-                A community of like-minded innovators fueled by the power of<br className="hidden md:block" />
-                code. From your first line of code to your first big idea — CoHo<br className="hidden md:block" />
-                welcomes every student, from every department, to learn, build,<br className="hidden md:block" />
+                A community of like-minded innovators fueled by the power of{' '}
+                <br className="hidden md:block" />
+                code. From your first line of code to your first big idea — CoHo{' '}
+                <br className="hidden md:block" />
+                welcomes every student, from every department, to learn, build,{' '}
+                <br className="hidden md:block" />
                 and grow together.
               </motion.p>
 
@@ -240,7 +243,7 @@ const Home = () => {
                 >
                   <span className="relative z-10">CATCH US IN ACTION</span>
                   <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D7BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
                 </Link>
               </motion.div>
             </div>
