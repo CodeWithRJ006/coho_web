@@ -290,11 +290,9 @@ const Home = () => {
         <SharedContainer className="w-full relative z-20">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative w-full mb-12 md:mb-16">
             <div className="w-full md:w-[60%] z-20">
-              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] mb-4 md:mb-6">
-                <span className="text-[#3D9BFF] font-medium">02</span>
-                <span className="text-[#C9CED8] mx-[16px] sm:mx-[20px] md:mx-[22px]">/</span>
-                <span className="text-[#E4E8F0] uppercase font-medium">About CoHo</span>
-                <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] mb-4 md:mb-6">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+                <span className="text-[#C9CED8] uppercase font-medium">ABOUT COHO</span>
               </motion.div>
               <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="font-display font-extrabold leading-[0.95] md:leading-[0.9] tracking-tighter text-[clamp(36px,8.5vw,80px)] mb-6 md:mb-8 sm:whitespace-nowrap">
                 <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FFFFFF] via-[#8EC4FF] to-[#3D8BFF]">CODE. CREATE.</span>
@@ -329,13 +327,10 @@ const Home = () => {
       <section id="team" className="relative w-full py-24 md:py-32 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <SharedContainer className="w-full relative z-20">
           <div className="flex justify-between items-center w-full mb-8">
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
-              <span className="text-[#3D9BFF] font-medium">03</span>
-              <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
-              <span className="text-[#E4E8F0] uppercase font-medium">Our Team</span>
-              <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] whitespace-nowrap">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+              <span className="text-[#C9CED8] uppercase font-medium">OUR TEAM</span>
             </motion.div>
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[12px] tracking-[0.1em] text-[#8A8F98]">//03</motion.div>
           </div>
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative w-full aspect-[2.4/1] min-h-[140px] sm:min-h-[220px] md:min-h-[280px] mt-4 group transition-all duration-500 hover:scale-[1.01] hover:drop-shadow-[0_0_30px_rgba(61,155,255,0.4)] cursor-pointer">
             <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#10162A] to-[#080B16]" style={{ clipPath: 'polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)' }}>
@@ -376,13 +371,10 @@ const Home = () => {
 
       <section id="events" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
         <div className="flex justify-between items-center w-full mb-12">
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] whitespace-nowrap">
-            <span className="text-[#3D9BFF] font-medium">04</span>
-            <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
-            <span className="text-[#E4E8F0] uppercase font-medium">Events</span>
-            <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2.5 text-[11px] tracking-[0.25em] whitespace-nowrap">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+            <span className="text-[#C9CED8] uppercase font-medium">EVENTS</span>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-[12px] tracking-[0.1em] text-[#8A8F98]">//04</motion.div>
         </div>
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="relative w-[100vw] left-1/2 -translate-x-1/2 mask-edges">
             <EventCarousel events={EVENTS_DATA} />
