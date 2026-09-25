@@ -79,13 +79,32 @@ const SciFiCard = ({ delay, title, desc, icon, accent }) => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }} transition={{ duration: 0.8, delay }} className="relative group w-[263px] h-[187px] mx-auto card-hover">
-      <div className="absolute inset-0 bg-[#0a0e1c] overflow-hidden" style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ background: 'radial-gradient(circle at center, rgba(61,155,255,0.15) 0%, transparent 70%)' }} />
-        <div className="absolute inset-0 p-[30px] flex flex-col items-center text-center z-10">
-          <div className="mb-6 transform group-hover:-translate-y-2 group-hover:scale-110 transition-all duration-500">{icon}</div>
-          <h3 className="font-display font-black text-xl tracking-wider uppercase mb-4 text-[#D5DAE6] group-hover:text-white transition-colors">{title}</h3>
-          <p className="text-[#8A90A0] text-[13px] leading-relaxed tracking-wide font-light" dangerouslySetInnerHTML={{__html: desc}} />
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.8, delay }}
+      className="relative group w-[263px] h-[187px] card-hover shrink-0"
+    >
+      <div
+        className="absolute inset-0 bg-[#0a0e1c] overflow-hidden"
+        style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
+      >
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+          style={{ background: 'radial-gradient(circle at center, rgba(61,155,255,0.15) 0%, transparent 70%)' }}
+        />
+        <div className="absolute inset-0 pt-[26px] px-[31px] pb-[20px] flex flex-col items-start text-left z-10">
+          <div className="mb-[12px] transform group-hover:-translate-y-1 group-hover:scale-105 transition-all duration-500 shrink-0">
+            {icon}
+          </div>
+          <h3 className="font-sans font-medium text-[15px] tracking-[0.22em] uppercase mb-[6px] text-[#F2F4F8] group-hover:text-white transition-colors shrink-0">
+            {title}
+          </h3>
+          <p
+            className="font-sans font-light text-[13.3px] leading-[20px] text-[#B8BDC9] tracking-normal"
+            dangerouslySetInnerHTML={{ __html: desc }}
+          />
         </div>
       </div>
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 263 187" fill="none">
@@ -326,43 +345,44 @@ const Home = () => {
         </SharedContainer>
       </section>
 
-      <section id="about" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative w-full mb-16">
-          <div className="w-full md:w-[60%] z-20">
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] mb-6 whitespace-nowrap">
-              <span className="text-[#3D9BFF] font-medium">02</span>
-              <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
-              <span className="text-[#E4E8F0] uppercase font-medium">About CoHo</span>
-              <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
-            </motion.div>
-            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="font-display font-black leading-[0.9] tracking-tighter text-[3.5rem] sm:text-[4.5rem] md:text-[4.75rem] mb-8 whitespace-nowrap">
-              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FFFFFF] via-[#8EC4FF] to-[#3D8BFF]">CODE. CREATE.</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FF9A8A] via-[#FF5148] to-[#FF3838]">CONQUER.</span>
-            </motion.h2>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-[#D5DAE6] text-[17px] font-light tracking-[0.04em] leading-[21px] whitespace-nowrap">
-              A community of innovators powered by code.<br/>Learn. Build. Grow. Together.
-            </motion.p>
-          </div>
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="w-[180px] md:w-[225px] absolute right-0 md:right-4 top-0 md:top-[20%] opacity-20 md:opacity-100 z-10 pointer-events-none">
-            <div className="w-full h-full relative animate-float" style={{ animationDelay: '1s' }}>
-              <img src="/astronaut.webp" alt="Astronaut" className="w-full h-auto object-contain drop-shadow-[0_0_20px_rgba(61,155,255,0.2)]" />
+      <section id="about" className="relative w-full py-24 md:py-32 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
+        <SharedContainer className="w-full relative z-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative w-full mb-16">
+            <div className="w-full md:w-[60%] z-20">
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center text-[11px] tracking-[0.25em] mb-6 whitespace-nowrap">
+                <span className="text-[#3D9BFF] font-medium">02</span>
+                <span className="text-[#C9CED8] mx-[20px] md:mx-[22px]">/</span>
+                <span className="text-[#E4E8F0] uppercase font-medium">About CoHo</span>
+                <div className="hidden sm:block w-[100px] md:w-[182px] h-[1px] bg-white/75 ml-[22px]" />
+              </motion.div>
+              <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="font-display font-extrabold leading-[0.9] tracking-tighter text-[clamp(48px,5.3vw,80px)] mb-8 whitespace-nowrap">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FFFFFF] via-[#8EC4FF] to-[#3D8BFF]">CODE. CREATE.</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-b from-[#FF9A8A] via-[#FF5148] to-[#FF3838]">CONQUER.</span>
+              </motion.h2>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-[#D5DAE6] text-[17px] font-light tracking-[0.04em] leading-[24px] whitespace-nowrap">
+                A community of innovators powered by code.<br/>Learn. Build. Grow. Together.
+              </motion.p>
             </div>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="w-[225px] absolute right-[8%] top-[18%] opacity-100 z-10 pointer-events-none hidden md:block">
+              <div className="w-full h-full relative animate-float" style={{ animationDelay: '1s' }}>
+                <img src="/astronaut.webp" alt="Astronaut" className="w-full h-auto object-contain drop-shadow-[0_0_20px_rgba(61,155,255,0.2)]" />
+              </div>
+            </motion.div>
+          </div>
+          <div className="flex flex-nowrap overflow-x-auto pb-8 snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-x-[40px] gap-y-8 w-full justify-start items-start event-scrollbar">
+            <div className="snap-center shrink-0"><SciFiCard delay={0.1} title="WORKSHOPS" desc="Hands-on sessions to learn<br/>new tech, tools, and<br/>languages." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="3" width="36" height="26" rx="3"/><path d="M2 34h44l-3 5H5z"/><path d="M19 12l-5 6 5 6" stroke="#3D9BFF"/><path d="M29 12l5 6-5 6" stroke="#FF5A4F"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/></div>
+            <div className="snap-center shrink-0"><SciFiCard delay={0.2} title="HACKATHONS" desc="Build real projects under<br/>pressure, as a team." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M2 36c0-6 3-10 8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><circle cx="38" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M46 36c0-6-3-10-8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/></svg>} accent={<><path d="M.5 52V14L14 .5H52" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M262.5 135v38L249 186.5H211" stroke="#B48CFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" /></>}/></div>
+            <div className="snap-center shrink-0"><SciFiCard delay={0.3} title="TALK SHOWS" desc="Learn from voices in tech,<br/>on your campus." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="18" y="2" width="12" height="22" rx="6" stroke="#3D9BFF" className="group-hover:stroke-white transition-colors duration-500"/><path d="M12 20c0 7 5 11 12 11s12-4 12-11M24 31v9M17 40h14"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/></div>
+            <div className="snap-center shrink-0"><SciFiCard delay={0.4} title="CODE FEST" desc="Compete, showcase, and<br/>celebrate code." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3h20v12a10 10 0 0 1-20 0z"/><path d="M14 7H6c0 7 3 10 8 10M34 7h8c0 7-3 10-8 10M24 25v8M16 40h16M18 33h12v7"/><path d="M24 8l1.6 3.2 3.4.5-2.5 2.4.6 3.4-3.1-1.6-3.1 1.6.6-3.4-2.5-2.4 3.4-.5z" stroke="#FF5A4F" strokeWidth="1" className="group-hover:stroke-white transition-colors duration-500"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#3D9BFF] transition-colors duration-500" />}/></div>
+          </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }} className="mt-12">
+            <button className="group relative inline-flex items-center justify-center gap-4 w-[256px] h-[44px] rounded-full border border-transparent text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden card-hover transition-transform duration-300 hover:scale-105" style={{ background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box' }}>
+              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">CATCH US IN ACTION</span>
+              <svg width="16" height="10" viewBox="0 0 18 12" fill="none" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            </button>
           </motion.div>
-        </div>
-        <div className="flex flex-nowrap overflow-x-auto pb-8 snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-x-8 lg:gap-x-[40px] gap-y-8 w-full event-scrollbar">
-          <div className="snap-center"><SciFiCard delay={0.1} title="WORKSHOPS" desc="Hands-on sessions to learn<br/>new tech, tools, and<br/>languages." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="3" width="36" height="26" rx="3"/><path d="M2 34h44l-3 5H5z"/><path d="M19 12l-5 6 5 6" stroke="#3D9BFF"/><path d="M29 12l5 6-5 6" stroke="#FF5A4F"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/></div>
-          <div className="snap-center"><SciFiCard delay={0.2} title="HACKATHONS" desc="Build real projects under<br/>pressure, as a team." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="24" cy="12" r="6"/><path d="M12 38c0-8 5-13 12-13s12 5 12 13z"/><circle cx="10" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M2 36c0-6 3-10 8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><circle cx="38" cy="17" r="4.5" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/><path d="M46 36c0-6-3-10-8-10" stroke="#FF5A4F" className="group-hover:stroke-[#B48CFF] transition-colors duration-500"/></svg>} accent={<><path d="M.5 52V14L14 .5H52" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#B48CFF] transition-colors duration-500" /><path d="M262.5 135v38L249 186.5H211" stroke="#B48CFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" /></>}/></div>
-          <div className="snap-center"><SciFiCard delay={0.3} title="TALK SHOWS" desc="Learn from voices in tech,<br/>on your campus." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="18" y="2" width="12" height="22" rx="6" stroke="#3D9BFF" className="group-hover:stroke-white transition-colors duration-500"/><path d="M12 20c0 7 5 11 12 11s12-4 12-11M24 31v9M17 40h14"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#3D9BFF" strokeWidth="1.6" className="group-hover:stroke-[#FF5A4F] transition-colors duration-500" />}/></div>
-          <div className="snap-center"><SciFiCard delay={0.4} title="CODE FEST" desc="Compete, showcase, and<br/>celebrate code." icon={<svg width="48" height="44" viewBox="0 0 48 44" fill="none" stroke="#E8ECF4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3h20v12a10 10 0 0 1-20 0z"/><path d="M14 7H6c0 7 3 10 8 10M34 7h8c0 7-3 10-8 10M24 25v8M16 40h16M18 33h12v7"/><path d="M24 8l1.6 3.2 3.4.5-2.5 2.4.6 3.4-3.1-1.6-3.1 1.6.6-3.4-2.5-2.4 3.4-.5z" stroke="#FF5A4F" strokeWidth="1" className="group-hover:stroke-white transition-colors duration-500"/></svg>} accent={<path d="M.5 52V14L14 .5H52M262.5 135v38L249 186.5H211" stroke="#FF5A4F" strokeWidth="1.6" className="group-hover:stroke-[#3D9BFF] transition-colors duration-500" />}/></div>
-        </div>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }} className="mt-12">
-          <button className="group relative inline-flex items-center justify-center gap-4 w-[256px] h-[44px] rounded-full border border-transparent text-[11px] tracking-[0.2em] font-medium text-white uppercase overflow-hidden  card-hover transition-transform duration-300 hover:scale-105" style={{ background: 'linear-gradient(#04060C, #04060C) padding-box, linear-gradient(90deg, #FF6B5E, #3D9BFF) border-box' }}>
-            <span className="relative z-10 transition-colors duration-300 group-hover:text-white">CATCH US IN ACTION</span>
-            <svg width="16" height="10" viewBox="0 0 18 12" fill="none" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"><path d="M1 6h15M11 1l5 5-5 5"/></svg>
-
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B5E] to-[#3D9BFF] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-          </button>
-        </motion.div>
+        </SharedContainer>
       </section>
 
       <section id="team" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden scroll-mt-[96px]">
