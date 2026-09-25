@@ -269,67 +269,6 @@ const Home = () => {
             </motion.div>
           </div>
         </SharedContainer>
-
-        <div className="relative z-20 flex-1 w-full max-w-[1920px] mx-auto flex flex-col justify-between px-6 md:px-24">
-          <div className="flex-1 flex flex-col justify-center w-full">
-            <div className="w-full max-w-[650px] pb-8 relative z-30">
-              <h1 className="font-display font-black leading-[0.85] tracking-tighter text-[4rem] sm:text-[6rem] md:text-[7.5rem] lg:text-[8.5rem] mb-6 flex flex-col whitespace-nowrap drop-shadow-2xl">
-                <AnimatedText text="CODE" className="text-white pb-1 md:pb-2" />
-                <AnimatedText text="HOPPERS" className="text-gradient-coral" />
-              </h1>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-base md:text-xl font-medium tracking-wide mb-5 md:mb-6 text-white/90">
-                Step in as a learner. Step out as a leader.
-              </motion.p>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-[#C9CED8] text-sm md:text-[15px] leading-relaxed max-w-[480px] mb-8 md:mb-10 font-light">
-                A community of like-minded innovators fueled by the power of code.<br className="hidden md:block"/>
-                From your first line of code to your first big idea — CoHo<br className="hidden md:block"/>
-                welcomes every student, from every department, to learn, build,<br className="hidden md:block"/>
-                and grow together.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}>
-                <Link to="/events" className="group relative inline-flex items-center gap-4 px-6 py-3 md:px-8 md:py-4 rounded-full border border-[#FF5A4F] text-[10px] md:text-[11px] tracking-[0.15em] font-medium uppercase overflow-hidden transition-all duration-300 bg-[#04060C]/50 backdrop-blur-md">
-                  <span className="relative z-10 text-white">CATCH US IN ACTION</span>
-                  <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1 text-white" />
-                  <div className="absolute inset-0 bg-[#FF5A4F] scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-                </Link>
-              </motion.div>
-            </div>
-
-            <div className="hidden lg:block absolute left-[45%] top-[50%] -translate-y-1/2 w-[480px] xl:w-[580px] pointer-events-none z-20">
-              <Astronaut />
-            </div>
-          </div>
-
-          <div className="w-full flex justify-between items-end pb-12 md:pb-16 pointer-events-none">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="flex items-start gap-4 hidden md:flex w-1/3">
-              <Compass className="w-5 h-5 text-[#8A8F98] mt-0.5" />
-              <div className="flex flex-col text-[9px] tracking-[0.2em] text-[#8A8F98] leading-[1.6]">
-                <span>EXPLORE</span>
-                <span>INNOVATE</span>
-                <span>BUILD</span>
-                <span>TOGETHER</span>
-              </div>
-            </motion.div>
-            <div className="flex flex-col items-center gap-4  pointer-events-auto w-full md:w-1/3" onClick={scrollToNext}>
-              <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#8A8F98] uppercase hidden md:block">Scroll to explore</span>
-              <motion.button animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }} className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-[#FF5A4F] flex items-center justify-center text-[#FF5A4F] hover:bg-[#FF5A4F] hover:text-white transition-colors group  card-hover">
-                <ChevronDown className="w-3 h-3 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
-              </motion.button>
-            </div>
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 1 }} className="flex items-center gap-4 md:gap-6 text-right justify-end hidden md:flex w-1/3">
-              <div className="w-[1px] h-6 md:h-8 bg-white/20" />
-              <div className="flex flex-col items-start text-left">
-                <div className="w-3 md:w-4 h-[2px] bg-[#FF5A4F] mb-2" />
-                <span className="text-[9px] md:text-[10px] tracking-[0.2em] font-medium uppercase text-white/80">St. Martin's</span>
-                <span className="text-[8px] md:text-[9px] tracking-[0.2em] text-[#8A8F98] uppercase">Engineering College</span>
-              </div>
-              <div className="flex flex-col text-[9px] md:text-[10px] tracking-[0.2em] text-[#8A8F98] ml-2">
-                <span>20</span>
-                <span>26</span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
       </section>
 
       <section id="about" className="relative w-full min-h-[720px] max-w-[1280px] mx-auto py-24 md:py-32 px-6 md:px-16 flex flex-col justify-center z-10 overflow-hidden">
