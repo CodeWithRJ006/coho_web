@@ -209,7 +209,7 @@ const Home = () => {
     <div className="w-full">
       <section className="relative w-full h-screen min-h-[750px] flex flex-col z-10 pt-28 md:pt-32">
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060C]/90 via-[#04060C]/40 to-transparent w-[95%] md:w-[65%] z-10 pointer-events-none" />
-        <SharedContainer className="flex flex-col justify-between">
+        <SharedContainer className="flex flex-col justify-between h-full w-full">
           <div className="flex-1 flex flex-col justify-center w-full">
             <div className="w-full max-w-[650px] pb-8 relative z-30">
               <h1 className="font-display font-black leading-[0.85] tracking-tighter text-[4rem] sm:text-[6rem] md:text-[7.5rem] lg:text-[8.5rem] mb-6 flex flex-col whitespace-nowrap drop-shadow-2xl">
