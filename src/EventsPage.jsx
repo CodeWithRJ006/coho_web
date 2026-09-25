@@ -15,13 +15,20 @@ const FeaturedEventCard = ({ event }) => {
       className="group relative block w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0e1c]/80 backdrop-blur-sm p-5 md:p-6 transition-all duration-250 ease-out hover:scale-[1.02] hover:border-[#3D9BFF]/50 hover:shadow-[0_0_24px_rgba(61,155,255,0.25)] mb-12"
     >
       <div
-        className="w-full h-[360px] md:h-[420px] overflow-hidden bg-[#0b0f1e] mb-4 border border-white/5"
+        className="relative w-full h-[360px] md:h-[420px] overflow-hidden bg-[#070a14] mb-4 border border-white/5 flex items-center justify-center"
         style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
+        {/* Subtle blurred backdrop fill matching poster colors */}
+        <img
+          src={event.image}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-25 scale-110 pointer-events-none"
+        />
         <img
           src={event.image}
           alt={event.name}
-          className="w-full h-full object-cover opacity-100 saturate-100 transition-transform duration-500 group-hover:scale-105"
+          className="relative z-10 max-w-full max-h-full w-full h-full object-contain opacity-100 saturate-100 transition-transform duration-500 group-hover:scale-105"
           onError={(err) => { err.target.style.display = 'none'; }}
         />
       </div>
@@ -50,13 +57,22 @@ const GridEventCard = ({ event }) => {
       className="group relative block w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0e1c]/80 backdrop-blur-sm p-4 md:p-5 transition-all duration-250 ease-out hover:scale-[1.02] hover:border-[#3D9BFF]/50 hover:shadow-[0_0_24px_rgba(61,155,255,0.25)]"
     >
       <div
-        className="w-full h-[260px] md:h-[300px] overflow-hidden bg-[#0b0f1e] border border-white/5"
+        className="relative w-full h-[280px] md:h-[320px] overflow-hidden bg-[#070a14] border border-white/5 flex items-center justify-center"
         style={{ clipPath: 'polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)' }}
       >
+        {/* Subtle blurred backdrop fill matching poster colors */}
+        <img
+          src={event.image}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover blur-xl scale-110 pointer-events-none ${
+            isUpcoming ? 'opacity-25' : 'opacity-15 grayscale-[40%]'
+          }`}
+        />
         <img
           src={event.image}
           alt={event.name}
-          className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+          className={`relative z-10 max-w-full max-h-full w-full h-full object-contain transition-all duration-500 group-hover:scale-105 ${
             isUpcoming ? 'opacity-100 saturate-100' : 'opacity-90 grayscale-[40%]'
           }`}
           onError={(err) => { err.target.style.display = 'none'; }}
