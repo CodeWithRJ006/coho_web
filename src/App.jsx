@@ -785,122 +785,174 @@ const DOMAIN_ROTARY_ITEMS = [
 
 // ── Semi-Circle Rotary Wheel Scrollbar ─────────────────────────────────────────
 function RotaryWheelScrollbar({ activeIndex, onSelect }) {
-  // Center of wheel on right screen edge (cx = 180, cy = 180)
-  // Radius R = 138px
-  const R = 138;
-  const cx = 180;
-  const cy = 180;
   const activeItem = DOMAIN_ROTARY_ITEMS[activeIndex] || DOMAIN_ROTARY_ITEMS[0];
 
+  // Desktop geometry: right edge semicircle
+  const R_desktop = 138;
+  const cx_desktop = 180;
+  const cy_desktop = 180;
+
+  // Mobile geometry: bottom edge semicircle arching upwards
+  const cx_mobile = 150;
+  const cy_mobile = 115;
+  const R_mobile = 80;
+
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden lg:flex items-center pointer-events-none select-none">
-      {/* SVG Rotary Wheel Arc Container */}
-      <div className="relative w-[180px] h-[360px] pointer-events-auto overflow-visible">
-        <svg
-          viewBox="0 0 180 360"
-          className="w-full h-full overflow-visible"
-        >
-          <defs>
-            <radialGradient id="rotary-glow" cx="100%" cy="50%" r="75%">
-              <stop offset="0%" stopColor={activeItem.color} stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#04060C" stopOpacity="0" />
-            </radialGradient>
-          </defs>
+    <>
+      {/* ── DESKTOP ROTARY WHEEL (Right Edge) ────────────────────────────── */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden lg:flex items-center pointer-events-none select-none">
+        <div className="relative w-[180px] h-[360px] pointer-events-auto overflow-visible">
+          <svg viewBox="0 0 180 360" className="w-full h-full overflow-visible">
+            <defs>
+              <radialGradient id="rotary-glow" cx="100%" cy="50%" r="75%">
+                <stop offset="0%" stopColor={activeItem.color} stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#04060C" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            <path d="M 180 35 A 145 145 0 0 0 180 325 Z" fill="url(#rotary-glow)" />
+            <path d="M 180 25 A 155 155 0 0 0 180 335" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="3 4" />
+            <path d="M 180 42 A 138 138 0 0 0 180 318" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="1.8" />
+            <path d="M 180 62 A 118 118 0 0 0 180 298" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+            <g transform={`translate(${cx_desktop - R_desktop}, ${cy_desktop})`}>
+              <path d="M -12 -22 L -20 -22 L -20 22 L -12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+              <path d="M 12 -22 L 20 -22 L 20 22 L 12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+              <circle cx="0" cy="0" r="24" fill="#04060C" stroke={activeItem.color} strokeWidth="2" />
+            </g>
+          </svg>
 
-          {/* Semi-circle glow fill */}
-          <path
-            d="M 180 35 A 145 145 0 0 0 180 325 Z"
-            fill="url(#rotary-glow)"
-          />
-
-          {/* Outer dashed rotary track */}
-          <path
-            d="M 180 25 A 155 155 0 0 0 180 335"
-            fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="1"
-            strokeDasharray="3 4"
-          />
-
-          {/* Main solid curved track */}
-          <path
-            d="M 180 42 A 138 138 0 0 0 180 318"
-            fill="none"
-            stroke="rgba(255,255,255,0.18)"
-            strokeWidth="1.8"
-          />
-
-          {/* Inner tick track */}
-          <path
-            d="M 180 62 A 118 118 0 0 0 180 298"
-            fill="none"
-            stroke="rgba(255,255,255,0.06)"
-            strokeWidth="1"
-          />
-
-          {/* Focal Reticle at Apex (x = 42, y = 180) */}
-          <g transform={`translate(${cx - R}, ${cy})`}>
-            {/* Reticle brackets around active logo */}
-            <path d="M -12 -22 L -20 -22 L -20 22 L -12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
-            <path d="M 12 -22 L 20 -22 L 20 22 L 12 22" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
-            {/* Center tick indicator ring */}
-            <circle cx="0" cy="0" r="24" fill="#04060C" stroke={activeItem.color} strokeWidth="2" />
-          </g>
-        </svg>
-
-        {/* Text inside the semicircle: perfectly centered, enlarged, no index counter */}
-        <div
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 pointer-events-none flex items-center justify-center text-center w-[100px]"
-        >
-          <span
-            className="font-mono text-[11px] sm:text-xs tracking-[0.2em] font-black uppercase px-3 py-1.5 border shadow-xl leading-tight"
-            style={{
-              color: activeItem.color,
-              borderColor: `${activeItem.color}80`,
-              backgroundColor: 'rgba(4,6,12,0.96)',
-              boxShadow: `0 0 20px ${activeItem.color}45`,
-            }}
-          >
-            {activeItem.label}
-          </span>
-        </div>
-
-        {/* Rotary Domain Nodes placed along the curve */}
-        {DOMAIN_ROTARY_ITEMS.map((item, idx) => {
-          const delta = idx - activeIndex;
-          const phi = delta * 0.42; // radians per node
-
-          if (Math.abs(phi) > 1.25) return null;
-
-          const x = cx - R * Math.cos(phi);
-          const y = cy + R * Math.sin(phi);
-          const isActive = idx === activeIndex;
-
-          return (
-            <button
-              key={item.key}
-              onClick={() => onSelect(idx)}
-              title={item.label}
-              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
-                isActive
-                  ? "w-12 h-12 z-30 shadow-xl scale-105"
-                  : "w-9 h-9 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white hover:scale-110"
-              }`}
+          {/* Centered label inside semicircle */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30 pointer-events-none flex items-center justify-center text-center w-[100px]">
+            <span
+              className="font-mono text-[11px] sm:text-xs tracking-[0.2em] font-black uppercase px-3 py-1.5 border shadow-xl leading-tight"
               style={{
-                left: `${x}px`,
-                top: `${y}px`,
-                backgroundColor: isActive ? "#04060C" : undefined,
-                borderColor: isActive ? item.color : undefined,
-                color: isActive ? item.color : undefined,
-                boxShadow: isActive ? `0 0 20px ${item.color}77` : undefined,
+                color: activeItem.color,
+                borderColor: `${activeItem.color}80`,
+                backgroundColor: 'rgba(4,6,12,0.96)',
+                boxShadow: `0 0 20px ${activeItem.color}45`,
               }}
             >
-              {item.icon}
-            </button>
-          );
-        })}
+              {activeItem.label}
+            </span>
+          </div>
+
+          {/* Desktop Nodes */}
+          {DOMAIN_ROTARY_ITEMS.map((item, idx) => {
+            const delta = idx - activeIndex;
+            const phi = delta * 0.42;
+            if (Math.abs(phi) > 1.25) return null;
+
+            const x = cx_desktop - R_desktop * Math.cos(phi);
+            const y = cy_desktop + R_desktop * Math.sin(phi);
+            const isActive = idx === activeIndex;
+
+            return (
+              <button
+                key={item.key}
+                onClick={() => onSelect(idx)}
+                title={item.label}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
+                  isActive
+                    ? "w-12 h-12 z-30 shadow-xl scale-105"
+                    : "w-9 h-9 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white hover:scale-110"
+                }`}
+                style={{
+                  left: `${x}px`,
+                  top: `${y}px`,
+                  backgroundColor: isActive ? "#04060C" : undefined,
+                  borderColor: isActive ? item.color : undefined,
+                  color: isActive ? item.color : undefined,
+                  boxShadow: isActive ? `0 0 20px ${item.color}77` : undefined,
+                }}
+              >
+                {item.icon}
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      {/* ── MOBILE ROTARY WHEEL (Bottom Semicircle Arch) ─────────────────── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden flex justify-center pointer-events-none select-none pb-0.5">
+        <div className="relative w-[300px] h-[115px] pointer-events-auto overflow-visible">
+          <svg viewBox="0 0 300 115" className="w-full h-full overflow-visible">
+            <defs>
+              <radialGradient id="rotary-mobile-glow" cx="50%" cy="100%" r="85%">
+                <stop offset="0%" stopColor={activeItem.color} stopOpacity="0.25" />
+                <stop offset="70%" stopColor="#04060C" stopOpacity="0.88" />
+                <stop offset="100%" stopColor="#04060C" stopOpacity="0.96" />
+              </radialGradient>
+            </defs>
+
+            {/* Backdrop arch glow & dark fill */}
+            <path d="M 58 115 A 92 92 0 0 1 242 115 Z" fill="url(#rotary-mobile-glow)" />
+
+            {/* Outer dashed track */}
+            <path d="M 58 115 A 92 92 0 0 1 242 115" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="3 4" />
+
+            {/* Main solid curved track */}
+            <path d="M 70 115 A 80 80 0 0 1 230 115" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.8" />
+
+            {/* Apex Reticle at top center (150, 35) */}
+            <g transform={`translate(${cx_mobile}, ${cy_mobile - R_mobile})`}>
+              <path d="M -15 -8 L -15 -15 L -8 -15" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+              <path d="M 15 -8 L 15 -15 L 8 -15" fill="none" stroke={activeItem.color} strokeWidth="1.8" />
+              <circle cx="0" cy="0" r="18" fill="#04060C" stroke={activeItem.color} strokeWidth="1.8" />
+            </g>
+          </svg>
+
+          {/* Centered Active Domain Name inside the semicircle cavity */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-2.5 z-30 pointer-events-none flex items-center justify-center text-center w-[130px]">
+            <span
+              className="font-mono text-[10px] tracking-[0.16em] font-black uppercase px-2.5 py-0.5 border shadow-lg leading-tight"
+              style={{
+                color: activeItem.color,
+                borderColor: `${activeItem.color}80`,
+                backgroundColor: 'rgba(4,6,12,0.96)',
+                boxShadow: `0 0 14px ${activeItem.color}40`,
+              }}
+            >
+              {activeItem.label}
+            </span>
+          </div>
+
+          {/* Mobile Nodes placed along the curve */}
+          {DOMAIN_ROTARY_ITEMS.map((item, idx) => {
+            const delta = idx - activeIndex;
+            const phi = delta * 0.44; // angle from apex
+            if (Math.abs(phi) > 1.35) return null;
+
+            const x = cx_mobile + R_mobile * Math.sin(phi);
+            const y = cy_mobile - R_mobile * Math.cos(phi);
+            const isActive = idx === activeIndex;
+
+            return (
+              <button
+                key={item.key}
+                onClick={() => onSelect(idx)}
+                title={item.label}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
+                  isActive
+                    ? "w-10 h-10 z-30 shadow-xl scale-105"
+                    : "w-7 h-7 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white"
+                }`}
+                style={{
+                  left: `${x}px`,
+                  top: `${y}px`,
+                  backgroundColor: isActive ? "#04060C" : undefined,
+                  borderColor: isActive ? item.color : undefined,
+                  color: isActive ? item.color : undefined,
+                  boxShadow: isActive ? `0 0 16px ${item.color}77` : undefined,
+                }}
+              >
+                <div className={isActive ? "scale-90" : "scale-70"}>
+                  {item.icon}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -1181,7 +1233,7 @@ const TeamPage = () => {
 
 
           {/* Rendered Domains with clean, unzoomed cards and anchor IDs */}
-          <div className="flex flex-col pb-16">
+          <div className="flex flex-col pb-36 sm:pb-40 lg:pb-16">
             {filteredDomains.map((domain, idx) => {
               const rotaryMatch = DOMAIN_ROTARY_ITEMS.find((r) =>
                 domain.domain.toLowerCase().includes(r.match.toLowerCase())
