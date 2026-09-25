@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion';
+import { LoadingScreen } from './LoadingScreen';
 import { ArrowRight, ChevronDown, Compass } from 'lucide-react';
 import Logo from './components/Logo';
 import { Routes, Route, Link } from 'react-router-dom';
@@ -605,8 +606,15 @@ const TeamPage = () => {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
-    <div className="bg-[#04060C] text-white relative selection:bg-[#FF5A4F]/30 selection:text-white flex flex-col w-full min-h-screen">
+    <>
+      <AnimatePresence mode="wait">
+        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+      {!loading && (
+        <div className="bg-[#04060C] text-white relative selection:bg-[#FF5A4F]/30 selection:text-white flex flex-col w-full min-h-screen">
 
       <Navbar />
 
@@ -628,5 +636,7 @@ export default function App() {
         </ErrorBoundary>
       </div>
     </div>
+      )}
+    </>
   );
 }
