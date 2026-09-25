@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-mot
 import { LoadingScreen } from './LoadingScreen';
 import { ChevronDown } from 'lucide-react';
 import Logo from './components/Logo';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { TEAM_DOMAINS } from './teamData';
 import { EVENTS_DATA, getSortedEvents, getEventLink, isUpcomingEvent } from './eventsData';
 import { EventsPage } from './EventsPage';
@@ -894,6 +894,28 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
   );
 }
 
+// ── Custom Framing Overrides for Specific Member Photos ──────────────────────
+const MEMBER_IMAGE_STYLES = {
+  akshay: { transform: 'scale(1.22)', transformOrigin: 'center 20%' },
+  aswin: { transform: 'scale(1.26)', transformOrigin: 'center 18%' },
+  ardha: { transform: 'scale(1.22)', transformOrigin: 'center 20%' },
+  pravallika: { transform: 'scale(1.25)', transformOrigin: 'center 18%' },
+  gnaneshwar: { transform: 'scale(1.28)', transformOrigin: 'center 20%' },
+  sahitya: { transform: 'scale(1.25)', transformOrigin: 'center 20%' },
+  amrit: { transform: 'scale(1.25)', transformOrigin: 'center 18%' },
+  akshaya: { transform: 'scale(1.12) translateY(-8%)', transformOrigin: 'center top' },
+};
+
+const getMemberImageStyle = (name = '') => {
+  const n = name.toLowerCase();
+  for (const [key, style] of Object.entries(MEMBER_IMAGE_STYLES)) {
+    if (n.includes(key)) {
+      return style;
+    }
+  }
+  return {};
+};
+
 // ── Clean Member Card (No zooming, natural framing, persistent info) ─────────
 const CleanMemberCard = ({ member, index }) => {
   const nodeHex = `0x0${String(index + 1).padStart(2, '0')}`;
@@ -914,12 +936,13 @@ const CleanMemberCard = ({ member, index }) => {
         </div>
       </div>
 
-      {/* Member Photo Frame - Normal framing, NO ZOOM, NO HOVER OVER ANIM */}
+      {/* Member Photo Frame - Normal framing with custom zoom/position adjustments */}
       <div className="relative w-full aspect-[4/5] bg-[#0c0f1c] overflow-hidden">
         <img
           src={encodeURI(member.image)}
           alt={member.name}
           className="w-full h-full object-cover object-[center_18%]"
+          style={getMemberImageStyle(member.name)}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = '/assets/team_placeholder.jpeg';
@@ -1228,7 +1251,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/team" element={<TeamPage />} />
-                <Route path="/teams" element={<TeamPage />} />
+                <Route path="/teams" element={<Navigate to="/team" replace />} />
                 <Route path="/events" element={<EventsPage />} />
               </Routes>
             </ErrorBoundary>
