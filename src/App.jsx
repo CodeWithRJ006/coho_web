@@ -414,49 +414,103 @@ const Home = () => {
   );
 };
 
-const TeamRoster = () => {
+const getRolePriority = (role = '') => {
+  const r = role.toLowerCase();
+  if (r.includes('lead') && !r.includes('co-lead') && !r.includes('vice')) return 1;
+  if (r.includes('co-lead') || r.includes('vice') || r.includes('president')) return 2;
+  return 3;
+};
+
+const AccordionRow = ({ domain }) => {
+  const [activeMemberIndex, setActiveMemberIndex] = useState(null);
+
+  const sortedMembers = [...domain.members].sort(
+    (a, b) => getRolePriority(a.role) - getRolePriority(b.role)
+  );
+
+  const isSmallGroup = sortedMembers.length < 5;
+
   return (
-    <div className="w-full mt-16 flex flex-col gap-24 relative z-20 pb-16 pt-8">
-      <div className="text-center mb-8">
-        <h2 className="font-display font-black text-4xl md:text-6xl uppercase tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">The Crew</h2>
-        <p className="text-[#8A90A0] text-sm md:text-base max-w-xl mx-auto tracking-wide">The brilliant minds behind Code Hoppers, driving innovation, technology, and community.</p>
+    <div className="w-full flex flex-col mb-14 md:mb-[64px]">
+      {/* Domain Heading */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)] shrink-0" />
+        <h3 className="font-display font-extrabold text-[24px] md:text-[28px] uppercase tracking-[0.12em] text-white">
+          {domain.domain}
+        </h3>
+        <div className="flex-1 h-[1px] bg-gradient-to-r from-white/20 to-transparent ml-4 hidden sm:block" />
       </div>
 
-      {TEAM_DOMAINS.map((domain, idx) => (
-        <div key={idx} className="flex flex-col w-full max-w-[1440px] mx-auto px-6 md:px-12">
-          <div className="flex items-center gap-4 mb-10 pl-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#FF5A4F] shadow-[0_0_12px_rgba(255,90,79,0.8)]" />
-            <h3 className="font-display text-lg md:text-2xl font-bold tracking-[0.15em] uppercase text-white/95">{domain.domain}</h3>
-            <div className="flex-1 h-[1px] bg-gradient-to-r from-white/20 to-transparent ml-6" />
-          </div>
+      {/* Accordion Row Container */}
+      <div
+        className={`w-full flex gap-4 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory event-scrollbar ${
+          isSmallGroup ? 'justify-start' : 'justify-between'
+        }`}
+      >
+        {sortedMembers.map((member, idx) => {
+          const isHovered = activeMemberIndex === idx;
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 md:gap-x-8 gap-y-12">
-            {domain.members.map((member, mIdx) => (
-              <div key={mIdx} className="flex flex-col items-center group  card-hover">
-                <div className="w-full aspect-[3/4] relative rounded-xl overflow-hidden mb-5 border border-white/5 bg-[#0b0f1e] shadow-lg transition-transform duration-500 group-hover:-translate-y-2">
-                  {member.image ? (
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="absolute inset-0 w-full h-full object-cover object-[center_20%] opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 ease-out"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextElementSibling.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#12182C] to-[#080B16] text-[#8A90A0]" style={{ display: member.image ? 'none' : 'flex' }}>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#04060C] via-transparent to-transparent opacity-80 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none" />
+          return (
+            <div
+              key={idx}
+              onMouseEnter={() => setActiveMemberIndex(idx)}
+              onMouseLeave={() => setActiveMemberIndex(null)}
+              onClick={() => setActiveMemberIndex(activeMemberIndex === idx ? null : idx)}
+              tabIndex={0}
+              onFocus={() => setActiveMemberIndex(idx)}
+              onBlur={() => setActiveMemberIndex(null)}
+              className={`snap-start shrink-0 h-[440px] rounded-[14px] overflow-hidden relative group cursor-pointer border border-white/10 bg-[#0a0e1c] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                isSmallGroup
+                  ? isHovered
+                    ? 'w-[320px] md:w-[360px]'
+                    : 'w-[220px] md:w-[240px]'
+                  : isHovered
+                  ? 'flex-[3.2] min-w-[280px]'
+                  : 'flex-1 min-w-[140px] md:min-w-0'
+              }`}
+            >
+              {/* Photo Image */}
+              <img
+                src={encodeURI(member.image)}
+                alt={member.name}
+                className="w-full h-full object-cover object-top opacity-100 transition-transform duration-700 group-hover:scale-105"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/assets/team_placeholder.jpeg';
+                }}
+              />
+
+              {/* Text Overlay (Reveals on Hover / Focus / Active) */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-t from-[#04060C]/90 via-[#04060C]/40 to-transparent flex flex-col justify-end p-5 transition-opacity duration-300 pointer-events-none ${
+                  isHovered ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100'
+                }`}
+              >
+                <div className="font-sans font-medium text-[18px] text-white leading-snug mb-1">
+                  {member.name}
                 </div>
-                <h4 className="font-medium text-[13px] md:text-[15px] text-white text-center leading-tight mb-1.5 transition-colors group-hover:text-[#3D9BFF]">{member.name}</h4>
-                <p className="text-[9px] md:text-[10px] tracking-[0.15em] text-[#8A90A0] uppercase text-center font-medium group-hover:text-white/80 transition-colors">{member.role}</p>
+                <div className="font-sans font-medium text-[10px] tracking-[0.2em] text-[#FF5A4F] uppercase">
+                  {member.role}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      ))}
+
+              {/* Default role badge when unhovered */}
+              <div
+                className={`absolute bottom-3 left-3 right-3 bg-[#04060C]/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 transition-opacity duration-300 pointer-events-none ${
+                  isHovered ? 'opacity-0' : 'opacity-100 md:group-hover:opacity-0 md:group-focus-within:opacity-0'
+                }`}
+              >
+                <div className="font-sans font-medium text-[13px] text-white truncate">
+                  {member.name}
+                </div>
+                <div className="font-sans font-medium text-[9px] tracking-[0.15em] text-[#8A90A0] uppercase truncate">
+                  {member.role}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -497,23 +551,68 @@ class ErrorBoundary extends React.Component {
 }
 
 const TeamPage = () => {
+  const videoRef = useRef(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.6;
+    }
   }, []);
 
   return (
-    <div className="pt-24 min-h-screen">
-      <SharedContainer className="flex items-center justify-between mt-8 relative z-50">
-        <Link to="/" className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-medium  card-hover group">
-          <div className="w-8 h-8 rounded-full border border-[#8A8F98]/30 flex items-center justify-center group-hover:border-white/60 group-hover:-translate-x-1 transition-all duration-300">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
+    <div className="relative min-h-screen bg-[#04060C] text-white flex flex-col w-full">
+      {/* Background Video */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-black overflow-hidden opacity-35">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover object-center scale-110"
+        >
+          <source src="/download.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/40 via-transparent to-[#04060C]" />
+      </div>
+
+      <div className="relative z-10 w-full flex-1 pt-32">
+        <SharedContainer>
+          {/* Back to Home Link */}
+          <div className="mb-8">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-3 text-[#8A8F98] hover:text-white transition-colors uppercase tracking-[0.2em] text-[11px] font-medium group"
+            >
+              <div className="w-8 h-8 rounded-full border border-[#8A8F98]/30 flex items-center justify-center group-hover:border-white/60 group-hover:-translate-x-1 transition-all duration-300">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+              </div>
+              BACK TO HOME
+            </Link>
           </div>
-          BACK TO HOME
-        </Link>
-      </SharedContainer>
-      <TeamRoster />
+
+          {/* Page Header */}
+          <div className="mb-16">
+            <h1 className="font-display font-extrabold text-5xl md:text-7xl uppercase tracking-tighter text-white mb-4">
+              THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A4F] to-[#3D9BFF]">CREW</span>
+            </h1>
+            <p className="text-[#8A90A0] text-sm md:text-base max-w-xl tracking-wide font-light">
+              The brilliant minds behind Code Hoppers, driving innovation, technology, and community.
+            </p>
+          </div>
+
+          {/* Accordion Rows per Domain */}
+          <div className="flex flex-col gap-4 pb-16">
+            {TEAM_DOMAINS.map((domain, idx) => (
+              <AccordionRow key={idx} domain={domain} />
+            ))}
+          </div>
+        </SharedContainer>
+      </div>
+
       <Footer />
     </div>
   );
