@@ -896,14 +896,14 @@ function RotaryWheelScrollbar({ activeIndex, onSelect }) {
 
 // ── Custom Framing Overrides for Specific Member Photos ──────────────────────
 const MEMBER_IMAGE_STYLES = {
-  akshay: { transform: 'scale(1.22)', transformOrigin: 'center 20%' },
-  aswin: { transform: 'scale(1.26)', transformOrigin: 'center 18%' },
-  ardha: { transform: 'scale(1.22)', transformOrigin: 'center 20%' },
-  pravallika: { transform: 'scale(1.25)', transformOrigin: 'center 18%' },
-  gnaneshwar: { transform: 'scale(1.28)', transformOrigin: 'center 20%' },
-  sahitya: { transform: 'scale(1.25)', transformOrigin: 'center 20%' },
-  amrit: { transform: 'scale(1.25)', transformOrigin: 'center 18%' },
-  akshaya: { transform: 'scale(1.12) translateY(-8%)', transformOrigin: 'center top' },
+  akshay: { objectPosition: 'center 65%', transform: 'scale(1.25)', transformOrigin: 'center center' },
+  aswin: { objectPosition: 'center 95%', transform: 'scale(1.68) translateY(-4%)', transformOrigin: 'center center' },
+  ardha: { objectPosition: 'center 35%', transform: 'scale(1.20)', transformOrigin: 'center center' },
+  pravallika: { objectPosition: 'center 45%', transform: 'scale(1.35)', transformOrigin: 'center center' },
+  gnaneshwar: { objectPosition: 'center 85%', transform: 'scale(1.40)', transformOrigin: 'center center' },
+  sahitya: { objectPosition: 'center 95%', transform: 'scale(1.78) translateY(-6%)', transformOrigin: 'center center' },
+  amrit: { objectPosition: 'center 50%', transform: 'scale(1.30)', transformOrigin: 'center center' },
+  akshaya: { objectPosition: 'center 65%', transform: 'scale(1.25)', transformOrigin: 'center center' },
 };
 
 const getMemberImageStyle = (name = '') => {
@@ -941,8 +941,8 @@ const CleanMemberCard = ({ member, index }) => {
         <img
           src={encodeURI(member.image)}
           alt={member.name}
-          className="w-full h-full object-cover object-[center_18%]"
-          style={getMemberImageStyle(member.name)}
+          className="w-full h-full object-cover"
+          style={{ objectPosition: 'center 18%', ...getMemberImageStyle(member.name) }}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = '/assets/team_placeholder.jpeg';
