@@ -604,111 +604,350 @@ const getRolePriority = (role = '') => {
   return 10;
 };
 
-// ── Codified Member Accordion Card ───────────────────────────────────────────
-const CodifiedMemberCard = ({ member, isActive, onSelect, index, domain }) => {
-  const nodeHex = `0x0${index + 1}`;
+// ── Domain Icons & Data for Rotary Wheel ───────────────────────────────────────
+const DOMAIN_ROTARY_ITEMS = [
+  {
+    key: "management",
+    id: "domain-management",
+    label: "MANAGEMENT",
+    match: "Management",
+    color: "#FF5A4F",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 18h20L19 7l-5 5-2-6-2 6-5-5-3 11z"/>
+        <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+      </svg>
+    )
+  },
+  {
+    key: "advisory",
+    id: "domain-advisory",
+    label: "ADVISORY",
+    match: "Advisory",
+    color: "#3D9BFF",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <polygon points="12 4 14 10 20 12 14 14 12 20 10 14 4 12 10 10" fill="currentColor" fillOpacity="0.3"/>
+      </svg>
+    )
+  },
+  {
+    key: "python",
+    id: "domain-python",
+    label: "PYTHON",
+    match: "Python",
+    color: "#FFD43B",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+        <path d="M11.9 2c-3.1 0-2.9 1.3-2.9 1.3l.01 1.4h3v.4H6.8S4 4.8 4 8c0 3.2 1.7 3.1 1.7 3.1h1v-1.5c0-1.7 1.4-1.7 1.4-1.7h5.1c1.4 0 1.4-1.3 1.4-1.3V4.7s.3-2.7-2.7-2.7h-1zm-1.7 1.2c.4 0 .7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7z" fill="#387EB8"/>
+        <path d="M12.1 22c3.1 0 2.9-1.3 2.9-1.3l-.01-1.4h-3v-.4h5.2s2.8.3 2.8-2.9c0-3.2-1.7-3.1-1.7-3.1h-1v1.5c0 1.7-1.4 1.7-1.4 1.7H9.8c-1.4 0-1.4 1.3-1.4 1.3v3.9s-.3 2.7 2.7 2.7h1zm1.7-1.2c-.4 0-.7-.3-.7-.7s.3-.7.7-.7.7.3.7.7-.3.7-.7.7z" fill="#FFE052"/>
+      </svg>
+    )
+  },
+  {
+    key: "java",
+    id: "domain-java",
+    label: "JAVA",
+    match: "Java",
+    color: "#F89820",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+        <line x1="6" y1="2" x2="6" y2="5" stroke="#FF5A4F"/>
+        <line x1="10" y1="1" x2="10" y2="5" stroke="#F89820"/>
+        <line x1="14" y1="2" x2="14" y2="5" stroke="#3D9BFF"/>
+      </svg>
+    )
+  },
+  {
+    key: "cpp",
+    id: "domain-cpp",
+    label: "C++",
+    match: "C++",
+    color: "#00599C",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+        <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="#3D9BFF" strokeWidth="1.5" fill="#00599C" fillOpacity="0.4"/>
+        <text x="12" y="15" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="900" fontFamily="monospace">C++</text>
+      </svg>
+    )
+  },
+  {
+    key: "web",
+    id: "domain-web",
+    label: "WEB DEV",
+    match: "Web",
+    color: "#00d4cc",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M8 10l-2 2 2 2"/>
+        <path d="M16 10l2 2-2 2"/>
+        <line x1="13" y1="9" x2="11" y2="15"/>
+      </svg>
+    )
+  },
+  {
+    key: "marketing",
+    id: "domain-marketing",
+    label: "MARKETING",
+    match: "Marketing",
+    color: "#ffaa00",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 11l14-5v12L3 13v-2z"/>
+        <path d="M17 9a4 4 0 0 1 0 6"/>
+        <path d="M7 13v5a2 2 0 0 0 2 2h1"/>
+      </svg>
+    )
+  },
+  {
+    key: "design",
+    id: "domain-design",
+    label: "DESIGN",
+    match: "Design",
+    color: "#FF7262",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/>
+        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      </svg>
+    )
+  },
+  {
+    key: "media",
+    id: "domain-media",
+    label: "MEDIA",
+    match: "Media",
+    color: "#c792ea",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M14.3 8l5.7 10"/>
+        <path d="M9.7 8h11.5"/>
+        <path d="M7.4 12l5.7-10"/>
+        <path d="M9.7 16L4 6.1"/>
+        <path d="M14.3 16H2.8"/>
+        <path d="M16.6 12l-5.7 10"/>
+      </svg>
+    )
+  },
+  {
+    key: "logistics",
+    id: "domain-logistics",
+    label: "EVENTS & LOGISTICS",
+    match: "Logistics",
+    color: "#00ff88",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <circle cx="12" cy="15" r="2" fill="currentColor"/>
+      </svg>
+    )
+  }
+];
+
+// ── Semi-Circle Rotary Wheel Scrollbar ─────────────────────────────────────────
+function RotaryWheelScrollbar({ activeIndex, onSelect }) {
+  // Center of wheel is on right screen edge (x = 160, y = 160)
+  // Radius R = 120px
+  const R = 120;
+  const cx = 160;
+  const cy = 160;
+  const activeItem = DOMAIN_ROTARY_ITEMS[activeIndex] || DOMAIN_ROTARY_ITEMS[0];
+
+  return (
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:flex items-center pointer-events-none select-none">
+      {/* Active Domain Label Callout Tag (Extending left into screen) */}
+      <div className="mr-3 flex items-center gap-2 pointer-events-auto">
+        <div
+          className="px-2.5 py-1 bg-[#04060C]/95 border font-mono text-[10px] tracking-[0.18em] uppercase font-bold flex items-center gap-2 shadow-2xl backdrop-blur-md"
+          style={{
+            borderColor: activeItem.color,
+            color: activeItem.color,
+            boxShadow: `0 0 20px ${activeItem.color}33`,
+          }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: activeItem.color }} />
+          <span>{activeItem.label}</span>
+          <span className="text-white/30 text-[9px]">{`0${activeIndex + 1}`}</span>
+        </div>
+        {/* Needle pointer */}
+        <div className="w-3 h-px" style={{ backgroundColor: activeItem.color }} />
+      </div>
+
+      {/* SVG Rotary Wheel Arc */}
+      <div className="relative w-[160px] h-[320px] pointer-events-auto">
+        <svg
+          viewBox="0 0 160 320"
+          className="w-full h-full overflow-visible"
+        >
+          <defs>
+            <radialGradient id="rotary-glow" cx="100%" cy="50%" r="70%">
+              <stop offset="0%" stopColor="#3D9BFF" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#04060C" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Semi-circle glow fill */}
+          <path
+            d="M 160 40 A 120 120 0 0 0 160 280 Z"
+            fill="url(#rotary-glow)"
+          />
+
+          {/* Outer dashed rotary track */}
+          <path
+            d="M 160 30 A 130 130 0 0 0 160 290"
+            fill="none"
+            stroke="rgba(255,255,255,0.08)"
+            strokeWidth="1"
+            strokeDasharray="3 4"
+          />
+
+          {/* Main solid curved track */}
+          <path
+            d="M 160 40 A 120 120 0 0 0 160 280"
+            fill="none"
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="1.5"
+          />
+
+          {/* Inner tick track */}
+          <path
+            d="M 160 55 A 105 105 0 0 0 160 265"
+            fill="none"
+            stroke="rgba(255,255,255,0.06)"
+            strokeWidth="1"
+          />
+
+          {/* Focal Reticle at Apex (x = 40, y = 160) */}
+          <g transform={`translate(${cx - R}, ${cy})`}>
+            {/* Reticle brackets */}
+            <path d="M -8 -16 L -14 -16 L -14 16 L -8 16" fill="none" stroke={activeItem.color} strokeWidth="1.5" />
+            <path d="M 8 -16 L 14 -16 L 14 16 L 8 16" fill="none" stroke={activeItem.color} strokeWidth="1.5" />
+            {/* Center tick indicator */}
+            <circle cx="0" cy="0" r="18" fill="#04060C" stroke={activeItem.color} strokeWidth="1.8" />
+          </g>
+        </svg>
+
+        {/* Rotary Domain Nodes placed along the curve */}
+        {DOMAIN_ROTARY_ITEMS.map((item, idx) => {
+          // Calculate angle relative to activeIndex
+          // Apex (active) is at phi = 0
+          const delta = idx - activeIndex;
+          const phi = delta * 0.42; // radians per item
+
+          // Only render if reasonably visible within the semi-circle (-1.3 to +1.3 rad)
+          if (Math.abs(phi) > 1.25) return null;
+
+          const x = cx - R * Math.cos(phi);
+          const y = cy + R * Math.sin(phi);
+          const isActive = idx === activeIndex;
+
+          return (
+            <button
+              key={item.key}
+              onClick={() => onSelect(idx)}
+              title={item.label}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center transition-all duration-300 group cursor-pointer ${
+                isActive
+                  ? "w-8 h-8 z-30 shadow-lg scale-110"
+                  : "w-6 h-6 z-20 bg-[#070913] border border-white/20 text-[#8b949e] hover:border-white hover:text-white hover:scale-110"
+              }`}
+              style={{
+                left: `${x}px`,
+                top: `${y}px`,
+                backgroundColor: isActive ? "#04060C" : undefined,
+                borderColor: isActive ? item.color : undefined,
+                color: isActive ? item.color : undefined,
+                boxShadow: isActive ? `0 0 15px ${item.color}66` : undefined,
+              }}
+            >
+              {item.icon}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+// ── Clean Member Card (No zooming, natural framing, persistent info) ─────────
+const CleanMemberCard = ({ member, index }) => {
+  const nodeHex = `0x0${String(index + 1).padStart(2, '0')}`;
   const isLead =
     member.role?.toLowerCase().includes('lead') ||
     member.role?.toLowerCase().includes('president') ||
-    member.role?.toLowerCase().includes('secretary');
+    member.role?.toLowerCase().includes('secretary') ||
+    member.role?.toLowerCase().includes('advisor');
 
   return (
-    <div
-      onMouseEnter={onSelect}
-      onClick={onSelect}
-      tabIndex={0}
-      onFocus={onSelect}
-      className={`snap-start shrink-0 h-[400px] sm:h-[460px] md:h-[480px] rounded-none overflow-hidden relative cursor-pointer border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] select-none flex flex-col justify-between ${
-        isActive
-          ? 'w-[280px] sm:w-[320px] md:flex-[3.2] md:min-w-[280px] border-[#3D9BFF] shadow-[0_0_30px_rgba(61,155,255,0.2)] bg-[#070913]'
-          : 'w-[72px] sm:w-[86px] md:flex-1 md:min-w-0 border-white/10 hover:border-white/25 opacity-70 hover:opacity-90 bg-[#05060b]'
-      }`}
-    >
-      {/* Top Terminal Status Header */}
-      <div className="relative z-20 flex items-center justify-between px-3 py-2 bg-[#04060C]/90 border-b border-white/10 text-[10px] font-mono">
-        <span className={isActive ? 'text-[#3D9BFF] font-semibold' : 'text-[#546e7a]'}>
-          NODE:{nodeHex}
-        </span>
+    <div className="relative w-full rounded-none overflow-hidden border border-white/10 bg-[#070913] flex flex-col transition-colors duration-200 hover:border-white/30">
+      {/* Top Cyber Telemetry Bar */}
+      <div className="flex items-center justify-between px-3 py-1.5 bg-[#04060C] border-b border-white/8 text-[10px] font-mono">
+        <span className="text-[#546e7a]">NODE:{nodeHex}</span>
         <div className="flex items-center gap-1.5">
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              isActive ? 'bg-[#00ff88] animate-pulse' : 'bg-[#546e7a]'
-            }`}
-          />
-          <span className="hidden sm:inline text-[#546e7a]">
-            {isActive ? 'ACTIVE' : 'STANDBY'}
-          </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88]" />
+          <span className="text-[#546e7a] text-[9px]">ONLINE</span>
         </div>
       </div>
 
-      {/* Member Photo Background */}
-      <div className="absolute inset-0 bg-[#07080e] overflow-hidden">
+      {/* Member Photo Frame - Normal framing, NO ZOOM, NO HOVER OVER ANIM */}
+      <div className="relative w-full aspect-[4/5] bg-[#0c0f1c] overflow-hidden">
         <img
           src={encodeURI(member.image)}
           alt={member.name}
-          className={`w-full h-full object-cover object-top transition-all duration-700 ${
-            isActive ? 'grayscale-0 scale-105 opacity-100' : 'grayscale opacity-35 scale-100'
-          }`}
+          className="w-full h-full object-cover object-[center_18%]"
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = '/assets/team_placeholder.jpeg';
           }}
         />
-        {/* Scrim Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#04060C] via-[#04060C]/50 to-transparent" />
+        {/* Subtle gradient blend */}
+        <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#070913] to-transparent pointer-events-none" />
       </div>
 
-      {/* Active Content Panel */}
-      <div
-        className={`relative z-20 p-5 transition-all duration-300 font-mono ${
-          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-        }`}
-      >
-        {/* Role token tag */}
-        <div className="flex items-center gap-2 mb-2">
-          <span
-            className={`text-[10px] px-2 py-0.5 border font-semibold tracking-wider uppercase ${
-              isLead
-                ? 'bg-[#FF5A4F]/15 text-[#FF5A4F] border-[#FF5A4F]/50'
-                : 'bg-[#3D9BFF]/15 text-[#3D9BFF] border-[#3D9BFF]/50'
-            }`}
-          >
-            &lt;{member.role || 'Member'} /&gt;
-          </span>
-          <span className="text-[10px] text-[#546e7a]">ping: 14ms</span>
+      {/* Persistent Info Section below photo - ALWAYS VISIBLE, NO HOVER REVEAL */}
+      <div className="p-3.5 bg-[#070913] border-t border-white/8 flex flex-col justify-between flex-1">
+        <div>
+          {/* Role badge */}
+          <div className="mb-2">
+            <span
+              className={`inline-block font-mono text-[9.5px] px-2 py-0.5 border font-semibold tracking-wider uppercase ${
+                isLead
+                  ? 'bg-[#FF5A4F]/12 text-[#FF5A4F] border-[#FF5A4F]/40'
+                  : 'bg-[#3D9BFF]/12 text-[#3D9BFF] border-[#3D9BFF]/40'
+              }`}
+            >
+              &lt;{member.role || 'Member'} /&gt;
+            </span>
+          </div>
+
+          {/* Member Name */}
+          <h3 className="font-display font-bold text-[15px] sm:text-[16px] text-white leading-snug line-clamp-1">
+            {member.name}
+          </h3>
         </div>
 
-        {/* Member Name */}
-        <h3 className="font-display text-lg sm:text-xl font-bold whitespace-nowrap text-white">
-          {member.name}
-        </h3>
-
-        {/* Technical Sub-metadata */}
-        <div className="mt-2 pt-2 border-t border-white/10 flex justify-between items-center text-[10px] text-[#8b949e]">
+        {/* Footer Technical Metadata */}
+        <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-[#546e7a]">
           <span>branch: main</span>
-          <span className="text-[#00ff88]">status: 200 OK</span>
+          <span className="text-[#00ff88]">200 OK</span>
         </div>
       </div>
-
-      {/* Vertical Text for Inactive State */}
-      {!isActive && (
-        <div className="relative z-20 flex-1 flex items-end justify-center pb-8 pointer-events-none">
-          <p
-            className="text-xs font-mono text-[#8A90A0] tracking-widest whitespace-nowrap font-medium"
-            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-          >
-            [{nodeHex}] {member.name}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
 
-// ── Accordion Row per Domain ──────────────────────────────────────────────────
-const AccordionRow = ({ domain }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
+// ── Clean Domain Section ──────────────────────────────────────────────────────
+const CleanDomainSection = ({ domain, index, sectionId }) => {
   const sortedMembers = [...domain.members].sort(
     (a, b) => getRolePriority(a.role) - getRolePriority(b.role)
   );
@@ -718,7 +957,7 @@ const AccordionRow = ({ domain }) => {
     .replace(/[^a-zA-Z0-9]/g, '');
 
   return (
-    <div className="w-full flex flex-col mb-16 md:mb-20">
+    <div id={sectionId} className="w-full flex flex-col mb-16 md:mb-24 scroll-mt-28">
       {/* Domain Code Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3 mb-6 font-mono">
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -735,16 +974,13 @@ const AccordionRow = ({ domain }) => {
         </div>
       </div>
 
-      {/* Accordion Row Container */}
-      <div className="w-full flex gap-2.5 sm:gap-3.5 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory event-scrollbar justify-start">
+      {/* Grid of members - normally visible, no squishing, no zooming */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
         {sortedMembers.map((member, idx) => (
-          <CodifiedMemberCard
+          <CleanMemberCard
             key={idx}
             member={member}
-            isActive={idx === activeIndex}
-            onSelect={() => setActiveIndex(idx)}
             index={idx}
-            domain={domain.domain}
           />
         ))}
       </div>
@@ -755,6 +991,7 @@ const AccordionRow = ({ domain }) => {
 // ── Team Page Component ──────────────────────────────────────────────────────
 const TeamPage = () => {
   const [selectedFilter, setSelectedFilter] = useState('ALL');
+  const [activeRotaryIndex, setActiveRotaryIndex] = useState(0);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -763,6 +1000,45 @@ const TeamPage = () => {
       videoRef.current.playbackRate = 0.6;
     }
   }, []);
+
+  // Track active domain on scroll for rotary wheel
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      let currentIndex = 0;
+      let minDistance = Infinity;
+
+      DOMAIN_ROTARY_ITEMS.forEach((item, idx) => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const targetY = windowHeight * 0.35;
+          const dist = Math.abs(rect.top - targetY);
+          if (rect.top <= windowHeight * 0.7 && dist < minDistance) {
+            minDistance = dist;
+            currentIndex = idx;
+          }
+        }
+      });
+
+      setActiveRotaryIndex(currentIndex);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleSelectRotaryDomain = (idx) => {
+    setActiveRotaryIndex(idx);
+    const item = DOMAIN_ROTARY_ITEMS[idx];
+    if (item) {
+      const el = document.getElementById(item.id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const filterOptions = [
     { label: 'ALL', domainMatch: 'ALL' },
@@ -802,6 +1078,12 @@ const TeamPage = () => {
         <BackgroundCodeRain opacity={0.35} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060C]/60 via-transparent to-[#04060C]" />
       </div>
+
+      {/* Rotary Wheel Scrollbar on Right Edge */}
+      <RotaryWheelScrollbar
+        activeIndex={activeRotaryIndex}
+        onSelect={handleSelectRotaryDomain}
+      />
 
       <div className="relative z-10 w-full flex-1 pt-28 md:pt-32">
         <SharedContainer>
@@ -870,11 +1152,23 @@ const TeamPage = () => {
             })}
           </div>
 
-          {/* Accordion Rows per Domain */}
+          {/* Rendered Domains with clean, unzoomed cards and anchor IDs */}
           <div className="flex flex-col pb-16">
-            {filteredDomains.map((domain, idx) => (
-              <AccordionRow key={domain.domain || idx} domain={domain} />
-            ))}
+            {filteredDomains.map((domain, idx) => {
+              const rotaryMatch = DOMAIN_ROTARY_ITEMS.find((r) =>
+                domain.domain.toLowerCase().includes(r.match.toLowerCase())
+              );
+              const sectionId = rotaryMatch ? rotaryMatch.id : `domain-${idx}`;
+
+              return (
+                <CleanDomainSection
+                  key={domain.domain || idx}
+                  domain={domain}
+                  index={idx}
+                  sectionId={sectionId}
+                />
+              );
+            })}
           </div>
         </SharedContainer>
       </div>
