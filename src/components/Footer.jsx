@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 const Footer = () => (
   <footer className="relative w-full z-10 pt-20">
@@ -12,11 +13,13 @@ const Footer = () => (
 
         {/* Left side */}
         <div className="flex flex-col">
-          <a href="/#" className="font-display font-black text-[40px] leading-[46px] tracking-[-0.01em]  card-hover group">
-            <span className="bg-gradient-to-r from-[#FF5A4F] to-[#FF6E6E] text-transparent bg-clip-text">CO</span>
-            <span className="text-[#9B5CF6]">H</span>
-            <span className="text-[#2F7BFF]">O</span>
-          </a>
+            <Link
+              to="/"
+              aria-label="CoHo – CodeHoppers"
+              className="inline-flex items-center shrink-0"
+            >
+              <Logo size="footer" />
+            </Link>
           <div className="mt-5 font-light text-[14px] leading-[22px] text-[#C9CED8] tracking-[0.03em]">
             Step in as a learner.<br/>Step out as a leader.
           </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, ChevronDown, Compass } from 'lucide-react';
+import Logo from './components/Logo';
 import { Routes, Route, Link } from 'react-router-dom';
 import { TEAM_DOMAINS } from './teamData';
 import { EVENTS_DATA } from './eventsData';
@@ -47,10 +48,7 @@ const Navbar = () => {
   return (
     <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled ? 'w-[calc(100%-3rem)] md:w-[800px]' : 'w-[calc(100%-3rem)] max-w-[1440px]'}`}>
       <nav className="w-full bg-[#04060C]/90 backdrop-blur-md border border-white/5 rounded-full px-8 md:px-10 py-4 md:py-5 flex items-center justify-between shadow-2xl">
-        <Link to="/" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="font-display font-black text-xl tracking-wider card-hover flex items-center">
-          <span className="text-[#FF5A4F]">CO</span>
-          <span className="text-[#3D9BFF]">HO</span>
-        </Link>
+        <Logo size="nav" />
 
         <div className="hidden md:flex items-center gap-10 text-[10px] tracking-[0.25em] font-medium uppercase text-[#8A8F98]">
             <a href="/#about" className="relative group card-hover hover:text-white transition-colors">
